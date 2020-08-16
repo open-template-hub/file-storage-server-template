@@ -1,0 +1,12 @@
+{
+  "key": "S3",
+  "description": "Amazon S3 Provider",
+  "payload": {
+    "service": "S3",
+    "accessKeyId": "{AWS Access Key Id}",
+    "secretAccessKey": "{AWS Secret Key Id}",
+    "region": "{S3 Region}",
+    "apiVersion": "{API Version}",
+    "bucketName": "{S3 Bucket Name}"
+  }
+}

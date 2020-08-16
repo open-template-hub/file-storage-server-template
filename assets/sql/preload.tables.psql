@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS files(
+  id SERIAL PRIMARY KEY,
+  username text NOT NULL,
+  service_key text NOT NULL,
+  content_type text NOT NULL,
+  title text NOT NULL,
+  description text NOT NULL,
+  external_file_id text NOT NULL,
+  created_time timestamp NOT NULL,
+  last_update_time timestamp NOT NULL
+);

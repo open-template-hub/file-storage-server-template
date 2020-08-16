@@ -1,0 +1,40 @@
+{
+ "name": "file-storage-server-template",
+ "version": "1.0.0",
+ "description": "Template File Storage Server",
+ "main": "app.main.ts",
+ "license": "MIT",
+ "dependencies": {
+  "@types/dotenv": "^8.2.0",
+  "@types/express": "^4.17.6",
+  "@types/jsonwebtoken": "^8.5.0",
+  "@types/mongoose": "^5.5.34",
+  "asoiaf-api": "^1.0.1",
+  "aws-sdk": "^2.732.0",
+  "body-parser": "^1.19.0",
+  "cors": "^2.8.5",
+  "crypto-js": "^4.0.0",
+  "dotenv": "^8.2.0",
+  "express": "^4.17.1",
+  "express-promise-router": "^3.0.3",
+  "jsonwebtoken": "^8.5.1",
+  "mongoose": "^5.8.2",
+  "pg": "^8.3.0",
+  "request": "^2.88.2",
+  "ts-node": "^8.1.0",
+  "typescript": "^3.4.5",
+  "uuid": "^8.3.0"
+ },
+ "devDependencies": {
+  "@types/cors": "^2.8.7",
+  "@types/crypto-js": "^3.1.47",
+  "@types/node": "^14.0.27",
+  "@types/pg": "^7.14.4",
+  "@types/uuid": "^8.3.0",
+  "nodemon": "^1.19.0"
+ },
+ "scripts": {
+  "start": "ts-node app.main.ts",
+  "devStart": "nodemon --exec ts-node app.main.ts"
+ }
+}
