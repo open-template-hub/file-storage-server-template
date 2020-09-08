@@ -1,6 +1,6 @@
 {
  "name": "file-storage-server-template",
- "version": "1.0.1",
+ "version": "1.0.2",
  "description": "Template File Storage Server",
  "main": "app.main.ts",
  "license": "MIT",
