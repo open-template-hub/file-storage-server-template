@@ -24,11 +24,14 @@ export class S3FileService implements FileService {
 
   async upload(client: AWS.S3, file: File): Promise<File> {
     file.external_file_id = uuidv4();
-
+    const buf = Buffer.from(file.data.replace(/^data:image\/\w+;base64,/, ""),'base64');
+    
     const res = await client.putObject({
-      Body: file.data,
+      Body: buf,
       Key: file.external_file_id,
       Bucket: this.payload.bucketName,
+      ContentType: file.content_type,
+      ContentEncoding: 'base64'
      }, (err: AWS.AWSError) => {
        if (err) {
          throw new Error(err.message);
@@ -53,7 +56,7 @@ export class S3FileService implements FileService {
        }
      }).promise();
 
-     return res.$response.data;
+     return (res.$response.data as any).Body.toString('base64');
   }
 
 }
