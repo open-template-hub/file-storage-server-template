@@ -11,7 +11,7 @@ import { FileRepository } from "../repository/file.repository"
 import { ServiceClient } from "../models/service-client.model";
 
 export class FileController {
-  createFile = async (context: Context, file: File): Promise<boolean> => {
+  createFile = async (context: Context, file: File): Promise<any> => {
     if (!this.isValidFile(file)) throw new Error('File must contain contentType, title, description and data');
 
     const serviceClient = await this.getServiceClient(context.mongoDbProvider.conn as Connection, context.serviceKey);
@@ -20,21 +20,21 @@ export class FileController {
 
     if (file.uploaded) {
       const fileRepository = new FileRepository(context.postgreSqlProvider);
-      await fileRepository.saveFile(context.username, file, context.serviceKey);
-      return true;
+      const id = await fileRepository.saveFile(context.username, file, context.serviceKey);
+      return id;
     }
 
-    return false;
+    throw new Error('File upload failed');
   }
 
-  downloadFile = async (context: Context, externalFileId: string): Promise<File> => {
-    const serviceClient = await this.getServiceClient(context.mongoDbProvider.conn as Connection, context.serviceKey);
-
+  downloadFile = async (context: Context, id: any): Promise<File> => {
     const fileRepository = new FileRepository(context.postgreSqlProvider);
-   
-    const file = await fileRepository.getFile(context.username, context.serviceKey, externalFileId);
 
-    file.data = await serviceClient.service.download(serviceClient.client, externalFileId) as Blob;
+    const file = await fileRepository.getFile(context.username, id);
+
+    const serviceClient = await this.getServiceClient(context.mongoDbProvider.conn as Connection, file.service_key);
+
+    file.data = await serviceClient.service.download(serviceClient.client, file.external_file_id) as Blob;
 
     return file;
   }
@@ -62,7 +62,7 @@ export class FileController {
   }
 
   private isValidFile = (file: File): boolean => {
-    if (file.title && file.contentType, file.data && file.description && file) return true;
+    if (file.title && file.content_type, file.data && file.description && file) return true;
     return false;
   }
 }

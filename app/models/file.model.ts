@@ -2,10 +2,11 @@ export interface File {
   id: number;
   title: string;
   description: string;
-  externalFileId: string;
-  createdTime: Date;
-  lastUpdateTime: Date;
+  external_file_id: string;
+  created_time: Date;
+  last_update_time: Date;
   data: Blob;
-  contentType: string;
+  content_type: string;
   uploaded: boolean;
+  service_key: string;
 }

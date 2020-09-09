@@ -15,7 +15,7 @@ export class S3FileService implements FileService {
       accessKeyId: payload.accessKeyId,
       secretAccessKey: payload.secretAccessKey,
       region: payload.region
-    }); 
+    });
 
     return new AWS.S3({
       apiVersion: payload.apiVersion
@@ -23,11 +23,11 @@ export class S3FileService implements FileService {
   }
 
   async upload(client: AWS.S3, file: File): Promise<File> {
-    file.externalFileId = uuidv4();
+    file.external_file_id = uuidv4();
 
     const res = await client.putObject({
       Body: file.data,
-      Key: file.externalFileId,
+      Key: file.external_file_id,
       Bucket: this.payload.bucketName,
      }, (err: AWS.AWSError) => {
        if (err) {
@@ -37,8 +37,8 @@ export class S3FileService implements FileService {
 
      file.uploaded = !res.$response.error;
 
-     file.createdTime = new Date();
-     file.lastUpdateTime = new Date();
+     file.created_time = new Date();
+     file.last_update_time = new Date();
 
      return file;
   }
@@ -55,5 +55,5 @@ export class S3FileService implements FileService {
 
      return res.$response.data;
   }
-  
+
 }

@@ -1,16 +1,10 @@
 ###
 
-GET http://localhost:4002/file
+GET http://localhost:4004/file?id=id
 Authorization: Bearer token
-{
-    "key": "S3",
-    "payload": {
-        "externalFileId": "2e010bf2-2af1-40e5-9c3f-91952f1a3cd7"
-    }
-}
 
 ###
-POST http://localhost:4002/file
+POST http://localhost:4004/file
 Content-Type: application/json
 Authorization: Bearer token
 
