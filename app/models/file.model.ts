@@ -1,3 +1,5 @@
+import { Base64 } from "aws-sdk/clients/ecr";
+
 export interface File {
   id: number;
   title: string;
@@ -5,7 +7,7 @@ export interface File {
   external_file_id: string;
   created_time: Date;
   last_update_time: Date;
-  data: Blob;
+  data: Base64;
   content_type: string;
   uploaded: boolean;
   service_key: string;

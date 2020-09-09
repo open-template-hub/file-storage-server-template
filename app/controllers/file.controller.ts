@@ -34,7 +34,7 @@ export class FileController {
 
     const serviceClient = await this.getServiceClient(context.mongoDbProvider.conn as Connection, file.service_key);
 
-    file.data = await serviceClient.service.download(serviceClient.client, file.external_file_id) as Blob;
+    file.data = await serviceClient.service.download(serviceClient.client, file.external_file_id);
 
     return file;
   }
