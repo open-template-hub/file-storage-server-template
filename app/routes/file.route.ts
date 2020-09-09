@@ -25,7 +25,7 @@ router.post(subRoutes.root, async (req: Request, res: Response) => {
 router.get(subRoutes.root, async (req: Request, res: Response) => {
  // Download a file
  let file = await fileController.downloadFile(res.locals.ctx, req.body.payload.externalFileId);
- res.status(ResponseCode.CREATED).json({ file });
+ res.status(ResponseCode.OK).json({ file });
 });
 
 export = router;
