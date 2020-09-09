@@ -5,7 +5,6 @@ import dotenv from 'dotenv'
 import cors from 'cors';
 import { Routes } from './app/routes/index.route';
 import express = require('express');
-import bodyParser = require('body-parser');
 import { preload } from './app/services/preload.service';
 
 dotenv.config();
@@ -14,10 +13,8 @@ preload();
 
 const app: express.Application = express();
 
-app.use(bodyParser.urlencoded({extended: false}))
-
 // parse application/json
-app.use(bodyParser.json())
+app.use(express.json({limit: '50mb'}))
 app.use(cors());
 
 Routes.mount(app);
