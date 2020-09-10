@@ -62,7 +62,7 @@ export class FileController {
   }
 
   private isValidFile = (file: File): boolean => {
-    if (file.title && file.content_type, file.data && file.description && file) return true;
+    if (file.title && file.content_type && file.data && file.description && file) return true;
     return false;
   }
 }
