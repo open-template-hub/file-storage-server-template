@@ -7,11 +7,9 @@ export class FileServiceWrapper implements FileService {
   uploadService: FileService | undefined;
 
   constructor(uploadService: FileServiceEnum) {
-    switch (uploadService) {
-      case FileServiceEnum.S3:
+    if (uploadService === FileServiceEnum.S3) {
       this.uploadService = new S3FileService();
-      break;
-      default:
+    } else {
       this.uploadService = undefined;
     }
   }
