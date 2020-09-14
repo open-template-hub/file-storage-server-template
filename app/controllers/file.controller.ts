@@ -32,6 +32,10 @@ export class FileController {
 
     const file = await fileRepository.getFile(context.username, id);
 
+    if (file === undefined) {
+      throw new Error("File not found with id: " + id);
+    }
+
     const serviceClient = await this.getServiceClient(context.mongoDbProvider.conn as Connection, file.service_key);
 
     file.data = await serviceClient.service.download(serviceClient.client, file.external_file_id);
