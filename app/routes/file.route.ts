@@ -18,14 +18,14 @@ const fileController = new FileController();
 
 router.post(subRoutes.root, async (req: Request, res: Response) => {
   // Upload a file
-  let uploaded = await fileController.createFile(res.locals.ctx, req.body.payload as File);
-  res.status(ResponseCode.CREATED).json({ uploaded });
+  let id = await fileController.createFile(res.locals.ctx, req.body.payload as File);
+  res.status(ResponseCode.CREATED).json({ id });
  });
 
 router.get(subRoutes.root, async (req: Request, res: Response) => {
  // Download a file
- let file = await fileController.downloadFile(res.locals.ctx, req.body.payload.externalFileId);
- res.status(ResponseCode.CREATED).json({ file });
+ let file = await fileController.downloadFile(res.locals.ctx, req.query.id);
+ res.status(ResponseCode.OK).json({ file });
 });
 
 export = router;

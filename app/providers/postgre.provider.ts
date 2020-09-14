@@ -23,18 +23,18 @@ export class PostgreSqlProvider {
       }
     });
 
-    await this.pool.connect((err, client, release) => {
+    this.pool.connect((err, client, release) => {
       if (err) {
           console.log(err);
       } else {
-          return console.log("no error");
+          return console.log("PostgreSQL pool initialized");
       }
   })
   }
 
   query = async(text: string, params: Array<any>): Promise<any> => {
     const start = Date.now();
-    if (this.pool == null) throw new Error(this.POOL_NOT_INITIALIZED); 
+    if (this.pool == null) throw new Error(this.POOL_NOT_INITIALIZED);
     const definedPool = this.pool;
     var promise = new Promise( function (resolve, reject) {
       definedPool.query(text, params, (err: Error, res: QueryResult<any>) => {

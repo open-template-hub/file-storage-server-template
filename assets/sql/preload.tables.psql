@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS files(
   description text NOT NULL,
   external_file_id text NOT NULL,
   created_time timestamp NOT NULL,
-  last_update_time timestamp NOT NULL
+  last_update_time timestamp NOT NULL,
+  is_public boolean NOT NULL
 );

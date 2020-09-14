@@ -1,59 +1,64 @@
-import { FileService } from "../models/file-service.model";
+import { FileService } from '../models/file-service.model';
 import AWS from 'aws-sdk';
-import { File } from "../models/file.model";
+import { File } from '../models/file.model';
 import { v4 as uuidv4 } from 'uuid';
 
 export class S3FileService implements FileService {
-  payload: any;
+ payload: any;
 
-  async initializeClient(providerConfig: any): Promise<AWS.S3> {
-    const payload = providerConfig.payload;
+ async initializeClient(providerConfig: any): Promise<AWS.S3> {
+  const payload = providerConfig.payload;
 
-    this.payload = payload;
+  this.payload = payload;
 
-    AWS.config.update({
-      accessKeyId: payload.accessKeyId,
-      secretAccessKey: payload.secretAccessKey,
-      region: payload.region
-    }); 
+  AWS.config.update({
+   accessKeyId: payload.accessKeyId,
+   secretAccessKey: payload.secretAccessKey,
+   region: payload.region
+  });
 
-    return new AWS.S3({
-      apiVersion: payload.apiVersion
-    });
+  return new AWS.S3({
+   apiVersion: payload.apiVersion
+  });
+ }
+
+ async upload(client: AWS.S3, file: File): Promise<File> {
+  file.external_file_id = uuidv4();
+  const buf = Buffer.from(file.data.replace(/^data:image\/\w+;base64,/, ''), 'base64');
+
+  let res;
+  try {
+   res = await client.putObject({
+    Body: buf,
+    Key: file.external_file_id,
+    Bucket: this.payload.bucketName,
+    ContentType: file.content_type,
+    ContentEncoding: 'base64'
+   }).promise();
+  } catch (err) {
+   throw new Error(err.message);
   }
 
-  async upload(client: AWS.S3, file: File): Promise<File> {
-    file.externalFileId = uuidv4();
+  file.uploaded = !res.$response.error;
 
-    const res = await client.putObject({
-      Body: file.data,
-      Key: file.externalFileId,
-      Bucket: this.payload.bucketName,
-     }, (err: AWS.AWSError) => {
-       if (err) {
-         throw new Error(err.message);
-       }
-     }).promise();
+  file.created_time = new Date();
+  file.last_update_time = new Date();
 
-     file.uploaded = !res.$response.error;
+  return file;
+ }
 
-     file.createdTime = new Date();
-     file.lastUpdateTime = new Date();
-
-     return file;
+ async download(client: AWS.S3, externalFileId: string): Promise<any> {
+  let res;
+  try {
+   res = await client.getObject({
+    Key: externalFileId,
+    Bucket: this.payload.bucketName,
+   }).promise();
+  } catch (err) {
+   throw new Error(err.message);
   }
 
-  async download(client: AWS.S3, externalFileId: string): Promise<any> {
-    const res = await client.getObject({
-      Key: externalFileId,
-      Bucket: this.payload.bucketName,
-     }, (err: AWS.AWSError) => {
-       if (err) {
-         throw new Error(err.message);
-       }
-     }).promise();
+  return (res.$response.data as any).Body.toString('base64');
+ }
 
-     return res.$response.data;
-  }
-  
 }
