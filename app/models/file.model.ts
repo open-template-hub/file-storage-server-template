@@ -11,4 +11,5 @@ export interface File {
   content_type: string;
   uploaded: boolean;
   service_key: string;
+  is_public: boolean;
 }
