@@ -40,9 +40,24 @@ Use this repository as a Template
 
 [![GitHubTemplate](https://img.shields.io/badge/GitHub-Template-24292e.svg?style=for-the-badge&logo=github)](https://github.com/open-template-hub/file-storage-server-template/generate)
 
-## Configurations
+## Installations
 
-```sh
+Install **nodejs** and **npm** via **[nodejs.org](https://nodejs.org)**.
+
+Check installed versions of **nodejs** and **npm** via running following commands:
+
+```
+node -v
+npm -v
+```
+
+Check project's current **nodejs** and **npm** version from **[package.json](package.json)**.
+
+## Environment Variables
+
+If you don't give **RESPONSE_ENCRYPTION_SECRET**, response encryption mechanism will be disabled automatically.
+
+```applescript
 PORT={Server Port}
 MONGODB_URI={MongoDB Connection String}
 DATABASE_URL={PostgreSQL Connection String}
@@ -50,11 +65,9 @@ ACCESS_TOKEN_SECRET={Access Token Secret}
 RESPONSE_ENCRYPTION_SECRET={Response Encryption Secret}
 ```
 
-If you don't give **RESPONSE_ENCRYPTION_SECRET**, response encryption mechanism will be disabled automatically.
-
 For pre-deployment of S3 provider, update **assets/sql/preload.data.json**
 with your configuration:
-```sh
+```json
 {
   "key": "S3",
   "description": "Amazon S3 Provider",
@@ -68,6 +81,10 @@ with your configuration:
   }
 }
 ```
+
+## Http Requests
+
+You can find list of available http request in the [requests](assets/requests) directory. You can run http requests directly via **WebStorm**, for more information check out: [jetbrains.com/help/idea/http-client-in-product-code-editor.html](https://jetbrains.com/help/idea/http-client-in-product-code-editor.html)
 
 ## Contributors
 
