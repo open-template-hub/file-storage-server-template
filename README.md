@@ -59,9 +59,13 @@ If you don't give **RESPONSE_ENCRYPTION_SECRET**, response encryption mechanism 
 
 ```applescript
 PORT={Server Port}
-MONGODB_URI={MongoDB Connection String}
-DATABASE_URL={PostgreSQL Connection String}
+
 ACCESS_TOKEN_SECRET={Access Token Secret}
+
+DATABASE_URL={PostgreSQL Connection String}
+
+MONGODB_URI={MongoDB Connection String}
+
 RESPONSE_ENCRYPTION_SECRET={Response Encryption Secret}
 ```
 
