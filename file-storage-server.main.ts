@@ -23,5 +23,5 @@ Routes.mount(app);
 // listen port
 const port: string = process.env.PORT || '4004' as string;
 app.listen(port, () => {
- console.log('Node app is running on port', port);
+ console.log('File Storage Server is running on port', port);
 });
