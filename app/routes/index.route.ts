@@ -25,9 +25,7 @@ export module Routes {
       let originalSend = res.send;
       const service = new EncryptionService();
       res.send = function () {
-        console.time("Response Encryption Execution Time");
         const encrypted_arguments = service.encrypt(arguments);
-        console.timeEnd("Response Encryption Execution Time");
 
         originalSend.apply(res, encrypted_arguments as any);
       };
