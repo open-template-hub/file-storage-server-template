@@ -10,7 +10,7 @@ export class PostgreSqlProvider {
 
   constructor() {
     this.connectionPool = new Array<Pool>();
-    this.currentPoolLimit = parseInt(<string>process.env.POSTGRE_CONNECTION_LIMIT) || 20 as number;
+    this.currentPoolLimit = parseInt(<string>process.env.POSTGRESQL_CONNECTION_LIMIT) || 20 as number;
     this.currentPoolIndex = 0;
   }
 
