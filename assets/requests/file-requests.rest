@@ -1,9 +1,8 @@
-###
-
+### Download File
 GET http://localhost:4004/file?id=id
 Authorization: Bearer token
 
-###
+### Upload File
 POST http://localhost:4004/file
 Content-Type: application/json
 Authorization: Bearer token

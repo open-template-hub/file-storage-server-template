@@ -2,7 +2,7 @@
  "name": "file-storage-server-template",
  "version": "2.0.1",
  "description": "Template File Storage Server",
- "main": "app.main.ts",
+ "main": "file-storage-server.main.ts",
  "license": "MIT",
  "dependencies": {
   "@types/dotenv": "^8.2.0",
@@ -34,7 +34,7 @@
   "nodemon": "^1.19.0"
  },
  "scripts": {
-  "start": "ts-node app.main.ts",
-  "devStart": "nodemon --exec ts-node app.main.ts"
+  "start": "ts-node file-storage-server.main.ts",
+  "devStart": "nodemon --exec ts-node file-storage-server.main.ts"
  }
 }
