@@ -19,7 +19,6 @@ export module Routes {
   const postgreSqlProvider = new PostgreSqlProvider();
 
   export const mount = (app: any) => {
-
     preload(mongoDbProvider, postgreSqlProvider).then(() => console.log('DB preloads are completed.'));
 
     const responseInterceptor = (_req: any, res: { send: () => void; }, next: () => void) => {
