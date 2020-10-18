@@ -9,12 +9,13 @@ import { Context } from "../models/context.model";
 import { Connection } from "mongoose";
 import { FileRepository } from "../repository/file.repository"
 import { ServiceClient } from "../models/service-client.model";
+import { MongoDbProvider } from "../providers/mongo.provider";
 
 export class FileController {
   createFile = async (context: Context, file: File): Promise<any> => {
     if (!this.isValidFile(file)) throw new Error('File must contain contentType, title, description and data');
 
-    const serviceClient = await this.getServiceClient(context.mongoDbProvider.conn as Connection, context.serviceKey);
+    const serviceClient = await this.getServiceClient(context.mongoDbProvider as MongoDbProvider, context.serviceKey);
 
     file = await serviceClient.service.upload(serviceClient.client, file);
 
@@ -36,15 +37,15 @@ export class FileController {
       throw new Error("File not found with id: " + id);
     }
 
-    const serviceClient = await this.getServiceClient(context.mongoDbProvider.conn as Connection, file.service_key);
+    const serviceClient = await this.getServiceClient(context.mongoDbProvider as MongoDbProvider, file.service_key);
 
     file.data = await serviceClient.service.download(serviceClient.client, file.external_file_id);
 
     return file;
   }
 
-  private getServiceClient = async (conn: Connection, serviceKey: string): Promise<ServiceClient> => {
-    const serviceConfig = await this.getServiceConfig(conn, serviceKey);
+  private getServiceClient = async (provider: MongoDbProvider, serviceKey: string): Promise<ServiceClient> => {
+    const serviceConfig = await this.getServiceConfig(provider, serviceKey);
 
     const service = new FileServiceWrapper(serviceConfig.payload.service)
 
@@ -55,8 +56,9 @@ export class FileController {
     return { client, service } as ServiceClient;
   }
 
-  private getServiceConfig = async (conn: Connection, serviceKey: string): Promise<any> => {
-    const serviceProviderRepository = new ServiceProviderRepository(conn).getRepository();
+  private getServiceConfig = async (provider: MongoDbProvider, serviceKey: string): Promise<any> => {
+    const conn = provider.getAvailableConnection();
+    const serviceProviderRepository = await new ServiceProviderRepository().getRepository(conn);
 
     let serviceConfig: any = await serviceProviderRepository.findOne({ key: serviceKey });
 
