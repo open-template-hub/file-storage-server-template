@@ -1,50 +1,68 @@
-import { Pool, QueryResult } from 'pg';
+import { QueryResult, Pool } from 'pg';
 import { Builder } from '../services/builder.service';
 
 export class PostgreSqlProvider {
- private readonly POOL_NOT_INITIALIZED = 'Pool not initialized';
- pool: Pool | null = null;
+  private connectionPool: Array<Pool>;
+  private currentPoolLimit: number;
+  private currentPoolIndex: number;
 
- builder = new Builder();
+  builder = new Builder();
 
- preloadTablesTemplatePath = './assets/sql/preload.tables.psql';
+  constructor() {
+    this.connectionPool = new Array<Pool>();
+    this.currentPoolLimit = parseInt(<string>process.env.POSTGRE_CONNECTION_LIMIT) || 20 as number;
+    this.currentPoolIndex = 0;
+  }
 
- preload = async () => {
-  await this.initConnection();
-  let tables = this.builder.buildTemplate(this.preloadTablesTemplatePath, null);
-  return await this.query(tables, []);
- }
+  preloadTablesTemplatePath = './assets/sql/preload.tables.psql';
 
- initConnection = async () => {
-  this.pool = new Pool({
-   connectionString: process.env.DATABASE_URL,
-   max: 20,
-   application_name: 'FileStorageServer',
-   ssl: {
-    rejectUnauthorized: false,
-   }
-  });
- }
+  preload = async () => {
+    this.createConnectionPool();
+    let tables = this.builder.buildTemplate(this.preloadTablesTemplatePath, null);
+    return await this.query(tables, []);
+  }
 
- query = async (text: string, params: Array<any>): Promise<any> => {
-  const start = Date.now();
-  if (this.pool == null) throw new Error(this.POOL_NOT_INITIALIZED);
+  createConnectionPool = () => {
+    // TODO: Find open Connections and Close
 
-  let client = await this.pool.connect();
-
-  return new Promise(function (resolve, reject) {
-   client.query(text, params, (err: Error, res: QueryResult<any>) => {
-    client.release();
-    if (err) {
-     console.error(err);
-     reject(err);
-    } else {
-     const duration = Date.now() - start;
-     console.log('executed query', {text, duration});
-     console.log('res', res);
-     resolve(res);
+    // Creating Connection Pool
+    for (let i = 0; i < this.currentPoolLimit; i++) {
+      let conn = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        application_name: 'FileStorageServer',
+        ssl: {
+          rejectUnauthorized: false,
+        }
+      });
+      this.connectionPool.push(conn);
     }
-   });
-  });
- }
+  }
+
+  getAvailableConnection = () => {
+    if (this.currentPoolIndex === this.currentPoolLimit) {
+      this.currentPoolIndex = 0;
+    }
+
+    console.log("PostgreSQL Current Pool Index: ", this.currentPoolIndex);
+    return this.connectionPool[this.currentPoolIndex++];
+  }
+
+  query = async (text: string, params: Array<any>): Promise<any> => {
+    const start = Date.now();
+    let conn = this.getAvailableConnection();
+
+    return new Promise(function (resolve, reject) {
+      conn.query(text, params, (err: Error, res: QueryResult<any>) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          const duration = Date.now() - start;
+          console.log('executed query', { text, duration });
+          console.log('res', res);
+          resolve(res);
+        }
+      });
+    });
+  }
 }

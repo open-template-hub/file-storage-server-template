@@ -9,7 +9,7 @@ export class ServiceProviderRepository {
 
   private productSchema: mongoose.Schema;
 
-  constructor(private readonly conn: mongoose.Connection) {
+  constructor() {
     /**
      * Provider schema
      */
@@ -26,8 +26,8 @@ export class ServiceProviderRepository {
    * creates provider model
    * @returns provider model
    */
-  getRepository = () => {
-    return this.conn.model(this.collectionName, this.productSchema);
+  getRepository = async(conn: mongoose.Connection) => {
+    return conn.model(this.collectionName, this.productSchema, this.collectionName);
   }
 }
 

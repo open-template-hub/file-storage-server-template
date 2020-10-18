@@ -5,6 +5,8 @@ import { context } from '../context';
 import { handle } from '../services/error-handler.service';
 import { EncryptionService } from '../services/encyrption.service';
 import { preload } from '../services/preload.service';
+import { MongoDbProvider } from '../providers/mongo.provider';
+import { PostgreSqlProvider } from '../providers/postgre.provider';
 
 const subRoutes = {
   root: '/',
@@ -13,17 +15,20 @@ const subRoutes = {
 }
 
 export module Routes {
+  const mongoDbProvider = new MongoDbProvider();
+  const postgreSqlProvider = new PostgreSqlProvider();
+
   export const mount = (app: any) => {
 
-    preload().then(() => console.log('DB preloads are completed.'));
+    preload(mongoDbProvider, postgreSqlProvider).then(() => console.log('DB preloads are completed.'));
 
     const responseInterceptor = (_req: any, res: { send: () => void; }, next: () => void) => {
       let originalSend = res.send;
       const service = new EncryptionService();
       res.send = function () {
-        console.log("Starting Encryption: ", new Date());
+        console.time("Response Encryption Execution Time");
         const encrypted_arguments = service.encrypt(arguments);
-        console.log("Encryption Completed: ", new Date());
+        console.timeEnd("Response Encryption Execution Time");
 
         originalSend.apply(res, encrypted_arguments as any);
       };
@@ -41,7 +46,7 @@ export module Routes {
     app.all('/*', async (req: Request, res: Response, next: () => void) => {
       try {
         // create context
-        res.locals.ctx = await context(req);
+        res.locals.ctx = await context(req, mongoDbProvider, postgreSqlProvider);
 
         next();
       } catch (e) {
