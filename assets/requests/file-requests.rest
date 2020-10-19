@@ -3,9 +3,10 @@ GET http://localhost:4004/file/public?id=1
 
 ### Download My File
 GET http://localhost:4004/file/me?id=1
+Authorization: Bearer token
 
 ### Upload File
-POST http://localhost:4004/file
+POST http://localhost:4004/file/me
 Content-Type: application/json
 Authorization: Bearer token
 
