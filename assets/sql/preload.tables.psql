@@ -1,4 +1,8 @@
-CREATE TABLE IF NOT EXISTS files(
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity
+WHERE application_name ILIKE ('FileStorageServer%') AND state NOT LIKE 'active' AND pid <> pg_backend_pid();
+
+create TABLE IF NOT EXISTS files(
   id SERIAL PRIMARY KEY,
   username text NOT NULL,
   service_key text NOT NULL,
