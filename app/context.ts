@@ -8,18 +8,30 @@ import { Context } from './models/context.model';
 import { PostgreSqlProvider } from './providers/postgre.provider';
 import { TokenService } from './services/token.service';
 
-export const context = async (req: any, mongoDbProvider: MongoDbProvider, postgreSqlProvider: PostgreSqlProvider) => {
-  const tokenService = new TokenService();
-  const authService = new AuthService(tokenService);
+export const context = async (req: any, mongoDbProvider: MongoDbProvider, postgreSqlProvider: PostgreSqlProvider, publicPaths: string[]) => {
+ const tokenService = new TokenService();
+ const authService = new AuthService(tokenService);
 
-  const currentUser: any = await authService.getCurrentUser(req);
+ let currentUser: any;
+ let publicPath = false;
 
-  const serviceKey = req.body.key;
+ for (const path of publicPaths) {
+  if (req.path.startsWith(path)) {
+   publicPath = true;
+   break;
+  }
+ }
 
-  return { 
-    mongoDbProvider, 
-    postgreSqlProvider, 
-    username: currentUser.username, 
-    serviceKey 
-  } as Context;
+ if (!publicPath) {
+  currentUser = await authService.getCurrentUser(req);
+ }
+
+ const serviceKey = req.body.key;
+
+ return {
+  mongoDbProvider,
+  postgreSqlProvider,
+  username: currentUser ? currentUser.username : '',
+  serviceKey
+ } as Context;
 }

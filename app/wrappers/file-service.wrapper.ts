@@ -4,28 +4,37 @@ import { File } from "../models/file.model";
 import { FileServiceEnum } from "../enums/file-service.enum";
 
 export class FileServiceWrapper implements FileService {
-  uploadService: FileService | undefined;
+ uploadService: FileService | undefined;
 
-  constructor(uploadService: FileServiceEnum) {
-    if (uploadService === FileServiceEnum.S3) {
-      this.uploadService = new S3FileService();
-    } else {
-      this.uploadService = undefined;
-    }
+ constructor(uploadService: FileServiceEnum) {
+  if (uploadService === FileServiceEnum.S3) {
+   this.uploadService = new S3FileService();
+  } else {
+   this.uploadService = undefined;
+  }
+ }
+
+ initializeClient = async (providerConfig: any): Promise<any> => {
+  if (this.uploadService === undefined) {
+   return null;
   }
 
-  initializeClient = async(providerConfig: any): Promise<any> => {
-    if (this.uploadService === undefined) return null;
-    return await this.uploadService.initializeClient(providerConfig);
+  return await this.uploadService.initializeClient(providerConfig);
+ }
+
+ upload = async (client: any, file: File): Promise<File> => {
+  if (this.uploadService === undefined) {
+   return file;
   }
 
-  upload = async(client: any, file: File): Promise<File> => {
-    if (this.uploadService === undefined) return file;
-    return await this.uploadService.upload(client, file);
+  return await this.uploadService.upload(client, file);
+ }
+
+ download = async (client: any, externalFileId: string): Promise<any> => {
+  if (this.uploadService === undefined) {
+   return null;
   }
 
-  download = async(client: any, externalFileId: string): Promise<any> => {
-    if (this.uploadService === undefined) return null;
-    return await this.uploadService.download(client, externalFileId);
-  }
+  return await this.uploadService.download(client, externalFileId);
+ }
 }

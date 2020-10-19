@@ -1,68 +1,50 @@
-import { QueryResult, Pool } from 'pg';
-import { Builder } from '../services/builder.service';
+import { Pool, QueryResult } from 'pg';
+import { Builder } from '../util/builder';
+
+// debug logger
+const debugLog = require('debug')('file-server:' + __filename.slice(__dirname.length + 1));
 
 export class PostgreSqlProvider {
-  private connectionPool: Array<Pool>;
-  private currentPoolLimit: number;
-  private currentPoolIndex: number;
 
-  builder = new Builder();
+ private connectionPool: Pool = new Pool();
+ private currentPoolLimit: number = 1;
 
-  constructor() {
-    this.connectionPool = new Array<Pool>();
-    this.currentPoolLimit = parseInt(<string>process.env.POSTGRESQL_CONNECTION_LIMIT) || 20 as number;
-    this.currentPoolIndex = 0;
-  }
+ builder = new Builder();
 
-  preloadTablesTemplatePath = './assets/sql/preload.tables.psql';
+ preloadTablesTemplatePath = './assets/sql/preload.tables.psql';
 
-  preload = async () => {
-    this.createConnectionPool();
-    let tables = this.builder.buildTemplate(this.preloadTablesTemplatePath, null);
-    return await this.query(tables, []);
-  }
+ preload = async () => {
+  this.currentPoolLimit = process.env.POSTGRESQL_CONNECTION_LIMIT ? parseInt(process.env.POSTGRESQL_CONNECTION_LIMIT) : 1;
 
-  createConnectionPool = () => {
-    // TODO: Find open Connections and Close
+  // Creating Connection Pool
+  this.connectionPool = new Pool({
+   connectionString: process.env.DATABASE_URL,
+   application_name: 'FileStorageServer',
+   max: this.currentPoolLimit,
+   ssl: {
+    rejectUnauthorized: false,
+   }
+  });
 
-    // Creating Connection Pool
-    for (let i = 0; i < this.currentPoolLimit; i++) {
-      let conn = new Pool({
-        connectionString: process.env.DATABASE_URL,
-        application_name: 'FileStorageServer',
-        ssl: {
-          rejectUnauthorized: false,
-        }
-      });
-      this.connectionPool.push(conn);
+  let queries = this.builder.buildTemplateFromFile(this.preloadTablesTemplatePath, null);
+  return await this.query(queries, []);
+ }
+
+ query = async (text: string, params: Array<any>): Promise<any> => {
+  const start = Date.now();
+
+  const connectionPool = this.connectionPool;
+
+  return new Promise(function (resolve, reject) {
+   connectionPool.query(text, params, (err: Error, res: QueryResult<any>) => {
+    if (err) {
+     console.error(err);
+     reject(err);
+    } else {
+     debugLog('executed query', {sql: text, duration: Date.now() - start, result: res});
+     resolve(res);
     }
-  }
-
-  getAvailableConnection = () => {
-    if (this.currentPoolIndex === this.currentPoolLimit) {
-      this.currentPoolIndex = 0;
-    }
-
-    console.log("PostgreSQL Current Pool Index: ", this.currentPoolIndex);
-    return this.connectionPool[this.currentPoolIndex++];
-  }
-
-  query = async (text: string, params: Array<any>): Promise<any> => {
-    const start = Date.now();
-    let conn = this.getAvailableConnection();
-
-    return new Promise(function (resolve, reject) {
-      conn.query(text, params, (err: Error, res: QueryResult<any>) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          const duration = Date.now() - start;
-          console.log('executed query', { text, duration });
-          console.log('res', res);
-          resolve(res);
-        }
-      });
-    });
-  }
+   });
+  });
+ }
 }
