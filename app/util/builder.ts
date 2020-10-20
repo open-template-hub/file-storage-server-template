@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 // debug logger
-const debugLog = require('debug')('wecontribute-file-server:' + __filename.slice(__dirname.length + 1));
+const debugLog = require('debug')('file-server:' + __filename.slice(__dirname.length + 1));
 
 export class Builder {
  buildTemplateFromFile = (filePath: string, params?: Map<string, string>) => {
