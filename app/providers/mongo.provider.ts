@@ -56,7 +56,7 @@ export class MongoDbProvider {
  }
 
  loadInitialData = async () => {
-  const data = this.builder.buildTemplateFromFile(this.preloadDataTemplatePath, null);
+  const data = this.builder.buildTemplateFromFile(this.preloadDataTemplatePath);
 
   if (data.length > 0) {
    const json = JSON.parse(data);
