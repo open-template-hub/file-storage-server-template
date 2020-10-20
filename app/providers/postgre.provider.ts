@@ -26,7 +26,7 @@ export class PostgreSqlProvider {
    }
   });
 
-  let queries = this.builder.buildTemplateFromFile(this.preloadTablesTemplatePath, null);
+  let queries = this.builder.buildTemplateFromFile(this.preloadTablesTemplatePath);
   return await this.query(queries, []);
  }
 
