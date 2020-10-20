@@ -5,13 +5,20 @@ import dotenv from 'dotenv'
 import cors from 'cors';
 import { Routes } from './app/routes/index.route';
 import express = require('express');
+import { configureCronJobs } from './app/services/cron.service';
+
+// debug logger
+const debugLog = require('debug')('file-server:' + __filename.slice(__dirname.length + 1));
 
 // use .env file
 const env = dotenv.config();
-console.log(env.parsed);
+debugLog(env.parsed);
 
 // express init
 const app: express.Application = express();
+
+// public files
+app.use(express.static('public'));
 
 // parse application/json
 app.use(express.json({limit: '50mb'}))
@@ -23,5 +30,8 @@ Routes.mount(app);
 // listen port
 const port: string = process.env.PORT || '4004' as string;
 app.listen(port, () => {
- console.log('File Storage Server is running on port', port);
+ console.info('File Storage Server is running on port: ', port);
 });
+
+// cron
+configureCronJobs();
