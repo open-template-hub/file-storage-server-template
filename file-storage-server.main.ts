@@ -6,9 +6,7 @@ import cors from 'cors';
 import { Routes } from './app/routes/index.route';
 import express = require('express');
 import { configureCronJobs } from './app/services/cron.service';
-
-// debug logger
-const debugLog = require('debug')('file-server:' + __filename.slice(__dirname.length + 1));
+import { debugLog } from './app/services/debug-log.service';
 
 // use .env file
 const env = dotenv.config();

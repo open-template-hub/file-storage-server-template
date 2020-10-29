@@ -38,6 +38,6 @@
  },
  "scripts": {
   "start": "ts-node file-storage-server.main.ts",
-  "devStart": "nodemon --exec ts-node file-storage-server.main.ts"
+  "devStart": "nodemon --exec DEBUG=* ts-node file-storage-server.main.ts"
  }
 }

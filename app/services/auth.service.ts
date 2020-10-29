@@ -10,8 +10,8 @@ export class AuthService {
  }
 
  getCurrentUser = async (req: { headers: { authorization: string; }; }) => {
-  let authToken = null;
-  let currentUser = null;
+  let authToken;
+  let currentUser;
 
   const authTokenHeader = req.headers.authorization;
   const BEARER = 'Bearer ';
