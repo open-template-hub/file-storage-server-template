@@ -34,6 +34,7 @@
   "uuid": "^8.3.0"
  },
  "devDependencies": {
+  "@types/debug": "^4.1.5",
   "nodemon": "^1.19.0"
  },
  "scripts": {
