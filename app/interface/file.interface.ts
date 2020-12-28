@@ -1,4 +1,8 @@
-import { Base64 } from "aws-sdk/clients/ecr";
+/**
+ * @description holds file interface
+ */
+
+import { Base64 } from 'aws-sdk/clients/ecr';
 
 export interface File {
   id: number;
