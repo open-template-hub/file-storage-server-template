@@ -1,18 +1,17 @@
 /**
  * @description holds server main
  */
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 import cors from 'cors';
-import { Routes } from './app/routes/index.route';
-import express = require('express');
-import { configureCronJobs } from './app/services/cron.service';
+import { Routes } from './app/route/index.route';
+import express from 'express';
+import { DebugLogUtil } from './app/util/debug-log.util';
 
-// debug logger
-const debugLog = require('debug')('file-server:' + __filename.slice(__dirname.length + 1));
+const debugLogUtil = new DebugLogUtil();
 
 // use .env file
 const env = dotenv.config();
-debugLog(env.parsed);
+debugLogUtil.log(env.parsed);
 
 // express init
 const app: express.Application = express();
@@ -21,17 +20,14 @@ const app: express.Application = express();
 app.use(express.static('public'));
 
 // parse application/json
-app.use(express.json({limit: '50mb'}))
+app.use(express.json({ limit: '50mb' }));
 app.use(cors());
 
 // mount routes
 Routes.mount(app);
 
 // listen port
-const port: string = process.env.PORT || '4004' as string;
+const port: string = process.env.PORT || ('4004' as string);
 app.listen(port, () => {
- console.info('File Storage Server is running on port: ', port);
+  console.info('File Storage Server is running on port: ', port);
 });
-
-// cron
-configureCronJobs();

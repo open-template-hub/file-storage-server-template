@@ -2,36 +2,61 @@
  * @description holds context
  */
 
-import { AuthService } from './services/auth.service';
-import { MongoDbProvider } from './providers/mongo.provider';
-import { Context } from './models/context.model';
-import { PostgreSqlProvider } from './providers/postgre.provider';
-import { TokenService } from './services/token.service';
+import { AuthUtil } from './util/auth.util';
+import { MongoDbProvider } from './provider/mongo.provider';
+import { Context } from './interface/context.interface';
+import { PostgreSqlProvider } from './provider/postgre.provider';
+import { TokenUtil } from './util/token.util';
+import { UserRole } from './enum/user-role.enum';
+import { ErrorMessage } from './constant';
 
-export const context = async (req: any, mongoDbProvider: MongoDbProvider, postgreSqlProvider: PostgreSqlProvider, publicPaths: string[]) => {
- const tokenService = new TokenService();
- const authService = new AuthService(tokenService);
+export const context = async (
+  req: any,
+  mongodb_provider: MongoDbProvider,
+  postgresql_provider: PostgreSqlProvider,
+  publicPaths: string[],
+  adminPaths: string[]
+) => {
+  const tokenUtil = new TokenUtil();
+  const authUtil = new AuthUtil(tokenUtil);
 
- let currentUser: any;
- let publicPath = false;
+  let currentUser: any;
+  let publicPath = false;
+  let adminPath = false;
 
- for (const path of publicPaths) {
-  if (req.path.startsWith(path)) {
-   publicPath = true;
-   break;
+  publicPaths.forEach((p) => {
+    if (req.path === p) {
+      publicPath = true;
+      return;
+    }
+  });
+
+  adminPaths.forEach((p) => {
+    if (req.path === p) {
+      adminPath = true;
+      return;
+    }
+  });
+
+  if (!publicPath) {
+    currentUser = await authUtil.getCurrentUser(req);
   }
- }
 
- if (!publicPath) {
-  currentUser = await authService.getCurrentUser(req);
- }
+  const serviceKey = req.body.key;
 
- const serviceKey = req.body.key;
+  const role = currentUser ? (currentUser.role as UserRole) : ('' as UserRole);
+  const isAdmin = authUtil.isAdmin(role);
 
- return {
-  mongoDbProvider,
-  postgreSqlProvider,
-  username: currentUser ? currentUser.username : '',
-  serviceKey
- } as Context;
-}
+  if (adminPath && !isAdmin) {
+    throw new Error(ErrorMessage.FORBIDDEN);
+  }
+
+  return {
+    mongodb_provider,
+    postgresql_provider,
+    username: currentUser ? currentUser.username : '',
+    role,
+    isAdmin,
+    serviceKey,
+  } as Context;
+};
