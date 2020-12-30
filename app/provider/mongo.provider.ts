@@ -5,6 +5,7 @@
 import mongoose, { Connection } from 'mongoose';
 import { BuilderUtil } from '../util/builder.util';
 import { ServiceProviderRepository } from '../repository/service-provider.repository';
+import { ServiceProvider } from '../interface/service-provider.interface';
 
 export class MongoDbProvider {
   // mongoose connection
@@ -61,15 +62,17 @@ export class MongoDbProvider {
 
     if (data.length > 0) {
       const json = JSON.parse(data);
-      const serviceProviderRepository = await new ServiceProviderRepository().getRepository(
+      const serviceProviderRepository = await new ServiceProviderRepository().initialize(
         this.connection
       );
-      let serviceConfig: any = await serviceProviderRepository.findOne({
-        key: json.key,
-      });
+      let serviceConfig: any = await serviceProviderRepository.getServiceProviderByKey(
+        json.key
+      );
 
       if (!serviceConfig) {
-        await serviceProviderRepository.create(json);
+        await serviceProviderRepository.createServiceProvider(
+          json as ServiceProvider
+        );
       }
     }
   };

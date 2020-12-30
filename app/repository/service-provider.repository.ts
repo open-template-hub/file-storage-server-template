@@ -1,36 +1,49 @@
 /**
- * @description holds provider model
+ * @description holds service provider repository
  */
 
-import mongoose from 'mongoose';
+import { ServiceProviderDataModel } from '../data/service-provider.data';
+import { ServiceProvider } from '../interface/service-provider.interface';
 
 export class ServiceProviderRepository {
-  private readonly collectionName: string = 'service-providers';
-
-  private productSchema: mongoose.Schema;
-
-  constructor() {
-    /**
-     * Provider schema
-     */
-    const schema: mongoose.SchemaDefinition = {
-      key: { type: String, unique: true, required: true, dropDups: true },
-      description: { type: String, required: true },
-      payload: { type: Object },
-    };
-
-    this.productSchema = new mongoose.Schema(schema);
-  }
+  private dataModel: any = null;
 
   /**
-   * creates provider model
-   * @returns provider model
+   * initializes service provider repository
+   * @param connection db connection
    */
-  getRepository = async (conn: mongoose.Connection) => {
-    return conn.model(
-      this.collectionName,
-      this.productSchema,
-      this.collectionName
+  initialize = async (connection: any) => {
+    this.dataModel = await new ServiceProviderDataModel().getDataModel(
+      connection
     );
+    return this;
+  };
+
+  /**
+   * creates service provider
+   * @param provider service provider
+   * @returns created service provider
+   */
+  createServiceProvider = async (provider: ServiceProvider) => {
+    try {
+      return await this.dataModel.create(provider);
+    } catch (error) {
+      console.error('> createServiceProvider error: ', error);
+      throw error;
+    }
+  };
+
+  /**
+   * gets service provider by key
+   * @param key key
+   * @returns service provider
+   */
+  getServiceProviderByKey = async (key: string) => {
+    try {
+      return await this.dataModel.findOne({ key });
+    } catch (error) {
+      console.error('> getServiceProviderByKey error: ', error);
+      throw error;
+    }
   };
 }

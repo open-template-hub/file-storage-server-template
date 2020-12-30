@@ -100,13 +100,13 @@ export class FileController {
   ): Promise<any> => {
     const conn = provider.getConnection();
 
-    const serviceProviderRepository = await new ServiceProviderRepository().getRepository(
+    const serviceProviderRepository = await new ServiceProviderRepository().initialize(
       conn
     );
 
-    let serviceConfig: any = await serviceProviderRepository.findOne({
-      key: serviceKey,
-    });
+    let serviceConfig: any = await serviceProviderRepository.getServiceProviderByKey(
+      serviceKey
+    );
 
     if (serviceConfig === null)
       throw new Error('Upload service can not be found');
