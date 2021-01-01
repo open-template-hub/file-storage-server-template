@@ -1,8 +1,25 @@
 import { FileService } from '../interface/file-service.interface';
-import S3 from 'aws-sdk/clients/s3';
 import { File } from '../interface/file.interface';
 import { v4 as uuidv4 } from 'uuid';
-import { config } from 'aws-sdk/global';
+
+class S3Package {
+  static config: any;
+  static S3: any;
+
+  public static getInstance() {
+    if (!this.config && !this.S3) {
+      const { config } = require('aws-sdk/global');
+      this.config = config;
+      this.S3 = require('aws-sdk/clients/s3');
+      console.info('Initializing S3 Package. Config: ', this.config);
+    }
+
+    return {
+      config: this.config,
+      S3: this.S3,
+    };
+  }
+}
 
 export class S3FileService implements FileService {
   constructor(private payload: any = null) {}
@@ -11,7 +28,12 @@ export class S3FileService implements FileService {
    * initializes client
    * @param providerConfig provider config
    */
-  async initializeClient(providerConfig: any): Promise<S3> {
+  async initializeClient(providerConfig: any): Promise<any> {
+    // Dynamically import aws sdks on initialize
+    const s3Package: any = S3Package.getInstance();
+    const config: any = s3Package.config;
+    const S3: any = s3Package.S3;
+
     const payload = providerConfig.payload;
 
     this.payload = payload;
@@ -32,7 +54,7 @@ export class S3FileService implements FileService {
    * @param client service client
    * @param file file
    */
-  async upload(client: S3, file: File): Promise<File> {
+  async upload(client: any, file: File): Promise<File> {
     file.external_file_id = uuidv4();
     const buf = Buffer.from(
       file.data.replace(/^data:image\/\w+;base64,/, ''),
@@ -67,7 +89,7 @@ export class S3FileService implements FileService {
    * @param client service client
    * @param externalFileId external file id
    */
-  async download(client: S3, externalFileId: string): Promise<any> {
+  async download(client: any, externalFileId: string): Promise<any> {
     let res;
     try {
       res = await client
