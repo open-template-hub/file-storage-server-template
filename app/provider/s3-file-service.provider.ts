@@ -10,7 +10,7 @@ class S3Package {
     if (!this.config && !this.S3) {
       this.config = require('aws-sdk/global');
       this.S3 = require('aws-sdk/clients/s3');
-      console.info('Initializing S3 Package');
+      console.info('Initializing S3 Package. Config: ', this.config);
     }
 
     return {
