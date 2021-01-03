@@ -3,7 +3,7 @@
  */
 
 import { File } from '../interface/file.interface';
-import { PostgreSqlProvider } from '../provider/postgre.provider';
+import { PostgreSqlProvider } from '@open-template-hub/common';
 
 export class FileRepository {
   constructor(private readonly provider: PostgreSqlProvider) {}

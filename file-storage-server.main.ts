@@ -5,8 +5,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { Routes } from './app/route/index.route';
 import express from 'express';
-import { DebugLogUtil } from './app/util/debug-log.util';
-import { UsageUtil } from './app/util/usage.util';
+import { DebugLogUtil } from '@open-template-hub/common';
+import { UsageUtil } from '@open-template-hub/common';
 
 const debugLogUtil = new DebugLogUtil();
 

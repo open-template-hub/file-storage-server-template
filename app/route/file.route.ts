@@ -4,7 +4,7 @@
 
 import Router from 'express-promise-router';
 import { Request, Response } from 'express';
-import { ResponseCode } from '../constant';
+import { ResponseCode } from '@open-template-hub/common';
 import { FileController } from '../controller/file.controller';
 import { File } from '../interface/file.interface';
 

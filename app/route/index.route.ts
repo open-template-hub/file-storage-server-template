@@ -7,13 +7,14 @@ import {
   publicRoutes as filePublicRoutes,
 } from './file.route';
 import { NextFunction, Request, Response } from 'express';
-import { context } from '../context';
-import { ErrorHandlerUtil } from '../util/error-handler.util';
-import { EncryptionUtil } from '../util/encryption.util';
-import { PreloadUtil } from '../util/preload.util';
-import { PostgreSqlProvider } from '../provider/postgre.provider';
-import { MongoDbProvider } from '../provider/mongo.provider';
-import { DebugLogUtil } from '../util/debug-log.util';
+import { context } from '@open-template-hub/common';
+import { ErrorHandlerUtil } from '@open-template-hub/common';
+import { EncryptionUtil } from '@open-template-hub/common';
+import { PreloadUtil } from '@open-template-hub/common';
+import { PostgreSqlProvider } from '@open-template-hub/common';
+import { MongoDbProvider } from '@open-template-hub/common';
+import { DebugLogUtil } from '@open-template-hub/common';
+import { Environment } from '../../environment';
 
 const subRoutes = {
   root: '/',
@@ -21,29 +22,43 @@ const subRoutes = {
   file: '/file',
 };
 
-const publicRoutes: string[] = [];
-var adminRoutes: string[] = [];
-
 export module Routes {
-  const mongoDbProvider = new MongoDbProvider();
-  const postgreSqlProvider = new PostgreSqlProvider();
+  var mongodb_provider: MongoDbProvider;
+  var environment: Environment;
+  var postgresql_provider: PostgreSqlProvider;
   const errorHandlerUtil = new ErrorHandlerUtil();
   const debugLogUtil = new DebugLogUtil();
+  var publicRoutes: string[] = [];
+  var adminRoutes: string[] = [];
+
+  function populateRoutes(mainRoute: string, routes: Array<string>) {
+    var populated = Array<string>();
+    for (var i = 0; i < routes.length; i++) {
+      const s = routes[i];
+      populated.push(mainRoute + (s === '/' ? '' : s));
+    }
+
+    return populated;
+  }
 
   export const mount = (app: any) => {
     const preloadUtil = new PreloadUtil();
+    environment = new Environment();
+    mongodb_provider = new MongoDbProvider(environment.args());
+    postgresql_provider = new PostgreSqlProvider(
+      environment.args(),
+      'FileServer'
+    );
 
     preloadUtil
-      .preload(mongoDbProvider, postgreSqlProvider)
+      .preload(mongodb_provider, postgresql_provider)
       .then(() => console.log('DB preloads are completed.'));
 
-    for (const route of monitorPublicRoutes) {
-      publicRoutes.push(subRoutes.monitor + route);
-    }
-
-    for (const route of filePublicRoutes) {
-      publicRoutes.push(subRoutes.file + route);
-    }
+    publicRoutes = [
+      ...populateRoutes(subRoutes.monitor, monitorPublicRoutes),
+      ...populateRoutes(subRoutes.file, filePublicRoutes),
+    ];
+    console.log('Public Routes: ', publicRoutes);
 
     const responseInterceptor = (
       req: Request,
@@ -51,7 +66,7 @@ export module Routes {
       next: NextFunction
     ) => {
       let originalSend = res.send;
-      const encryptionUtil = new EncryptionUtil();
+      const encryptionUtil = new EncryptionUtil(environment.args());
       res.send = function () {
         debugLogUtil.log('Starting Encryption: ', new Date());
         const encrypted_arguments = encryptionUtil.encrypt(arguments);
@@ -72,10 +87,11 @@ export module Routes {
         // create context
         res.locals.ctx = await context(
           req,
-          mongoDbProvider,
-          postgreSqlProvider,
+          environment.args(),
           publicRoutes,
-          adminRoutes
+          adminRoutes,
+          mongodb_provider,
+          postgresql_provider
         );
 
         next();
