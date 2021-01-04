@@ -5,10 +5,9 @@
 import { ServiceProviderRepository } from '../repository/service-provider.repository';
 import { FileServiceWrapper } from '../wrapper/file-service.wrapper';
 import { File } from '../interface/file.interface';
-import { Context } from '@open-template-hub/common';
+import { Context, MongoDbProvider } from '@open-template-hub/common';
 import { FileRepository } from '../repository/file.repository';
 import { ServiceClient } from '../interface/service-client.interface';
-import { MongoDbProvider } from '@open-template-hub/common';
 
 export class FileController {
   /**
