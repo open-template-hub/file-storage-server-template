@@ -1,12 +1,25 @@
-{
-  "key": "S3",
-  "description": "Amazon S3 Provider",
-  "payload": {
-    "service": "S3",
-    "accessKeyId": "{AWS Access Key Id}",
-    "secretAccessKey": "{AWS Secret Key Id}",
-    "region": "{S3 Region}",
-    "apiVersion": "{API Version}",
-    "bucketName": "{S3 Bucket Name}"
+[
+  {
+    "key": "S3",
+    "description": "Amazon S3 Provider",
+    "payload": {
+      "service": "S3",
+      "accessKeyId": "{AWS Access Key Id}",
+      "secretAccessKey": "{AWS Secret Key Id}",
+      "region": "{S3 Region}",
+      "apiVersion": "{API Version}",
+      "bucketName": "{S3 Bucket Name}"
+    }
+  },
+  {
+    "key": "Google",
+    "description": "Google Cloud Storage Provider",
+    "payload": {
+      "service": "Google",
+      "apiEndpoint": "{GCP Storage API Endpoint}",
+      "kmsKeyName": "{KMS Key Name}",
+      "userProject": "{Project Name}",
+      "bucketName": "{Bucket Name}"
+    }
   }
-}
+]

@@ -6,6 +6,7 @@ import { FileService } from '../interface/file-service.interface';
 import { S3FileService } from '../provider/s3-file-service.provider';
 import { File } from '../interface/file.interface';
 import { FileServiceEnum } from '../enum/file-service.enum';
+import { GoogleFileService } from '../provider/google-file-service.provider';
 
 export class FileServiceWrapper implements FileService {
   fileService: FileService | undefined;
@@ -13,6 +14,8 @@ export class FileServiceWrapper implements FileService {
   constructor(uploadService: FileServiceEnum) {
     if (uploadService === FileServiceEnum.S3) {
       this.fileService = new S3FileService();
+    } else if (uploadService === FileServiceEnum.Google) {
+      this.fileService = new GoogleFileService();
     } else {
       this.fileService = undefined;
     }
