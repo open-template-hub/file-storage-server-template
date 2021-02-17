@@ -5,7 +5,7 @@
 import mongoose from 'mongoose';
 
 export class ServiceProviderDataModel {
-  private readonly collectionName: string = 'service-provide';
+  private readonly collectionName: string = 'service_provider';
 
   private productSchema: mongoose.Schema;
 
