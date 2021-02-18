@@ -75,6 +75,7 @@ POSTGRESQL_CONNECTION_LIMIT={PostgreSQL Open Connection Limit}
 
 For pre-deployment of S3 provider, update **assets/sql/preload.data.json**
 with your configuration:
+
 ```json
 {
   "key": "S3",

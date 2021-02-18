@@ -12,9 +12,9 @@ export class ServiceProviderRepository {
    * initializes service provider repository
    * @param connection db connection
    */
-  initialize = async (connection: any) => {
+  initialize = async ( connection: any ) => {
     this.dataModel = await new ServiceProviderDataModel().getDataModel(
-      connection
+        connection
     );
     return this;
   };
@@ -24,11 +24,11 @@ export class ServiceProviderRepository {
    * @param provider service provider
    * @returns created service provider
    */
-  createServiceProvider = async (provider: ServiceProvider) => {
+  createServiceProvider = async ( provider: ServiceProvider ) => {
     try {
-      return await this.dataModel.create(provider);
-    } catch (error) {
-      console.error('> createServiceProvider error: ', error);
+      return await this.dataModel.create( provider );
+    } catch ( error ) {
+      console.error( '> createServiceProvider error: ', error );
       throw error;
     }
   };
@@ -38,11 +38,11 @@ export class ServiceProviderRepository {
    * @param key key
    * @returns service provider
    */
-  getServiceProviderByKey = async (key: string) => {
+  getServiceProviderByKey = async ( key: string ) => {
     try {
-      return await this.dataModel.findOne({ key });
-    } catch (error) {
-      console.error('> getServiceProviderByKey error: ', error);
+      return await this.dataModel.findOne( { key } );
+    } catch ( error ) {
+      console.error( '> getServiceProviderByKey error: ', error );
       throw error;
     }
   };

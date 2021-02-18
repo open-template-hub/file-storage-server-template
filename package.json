@@ -1,31 +1,31 @@
 {
- "name": "file-storage-server-template",
- "version": "2.0.13",
- "description": "Template File Storage Server",
- "main": "file-storage-server.main.ts",
- "license": "MIT",
- "dependencies": {
-  "@open-template-hub/common": "^1.0.7",
-  "@types/cors": "^2.8.7",
-  "@types/dotenv": "^8.2.0",
-  "@types/express": "^4.17.6",
-  "@types/mongoose": "^5.5.34",
-  "@types/uuid": "^8.3.0",
-  "aws-sdk": "^2.732.0",
-  "cors": "^2.8.5",
-  "dotenv": "^8.2.0",
-  "express": "^4.17.1",
-  "express-promise-router": "^3.0.3",
-  "mongoose": "^5.8.2",
-  "ts-node": "^8.1.0",
-  "typescript": "^3.4.5",
-  "uuid": "^8.3.0"
- },
- "devDependencies": {
-  "nodemon": "^1.19.0"
- },
- "scripts": {
-  "start": "ts-node file-storage-server.main.ts",
-  "devStart": "nodemon --exec DEBUG=* ts-node file-storage-server.main.ts"
- }
+  "name": "file-storage-server-template",
+  "version": "2.0.13",
+  "description": "Template File Storage Server",
+  "main": "file-storage-server.main.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@open-template-hub/common": "^1.0.7",
+    "@types/cors": "^2.8.7",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.6",
+    "@types/mongoose": "^5.5.34",
+    "@types/uuid": "^8.3.0",
+    "aws-sdk": "^2.732.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-promise-router": "^3.0.3",
+    "mongoose": "^5.8.2",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5",
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.0"
+  },
+  "scripts": {
+    "start": "ts-node file-storage-server.main.ts",
+    "devStart": "nodemon --exec DEBUG=* ts-node file-storage-server.main.ts"
+  }
 }

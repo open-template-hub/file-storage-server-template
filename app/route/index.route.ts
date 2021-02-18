@@ -1,22 +1,16 @@
 import {
-  router as monitorRouter,
-  publicRoutes as monitorPublicRoutes,
-} from './monitor.route';
-import {
-  router as fileRouter,
-  publicRoutes as filePublicRoutes,
-} from './file.route';
-import { NextFunction, Request, Response } from 'express';
-import {
   context,
-  ErrorHandlerUtil,
-  EncryptionUtil,
-  PreloadUtil,
-  PostgreSqlProvider,
-  MongoDbProvider,
   DebugLogUtil,
+  EncryptionUtil,
+  ErrorHandlerUtil,
+  MongoDbProvider,
+  PostgreSqlProvider,
+  PreloadUtil,
 } from '@open-template-hub/common';
+import { NextFunction, Request, Response } from 'express';
 import { Environment } from '../../environment';
+import { publicRoutes as filePublicRoutes, router as fileRouter, } from './file.route';
+import { publicRoutes as monitorPublicRoutes, router as monitorRouter, } from './monitor.route';
 
 const subRoutes = {
   root: '/',
@@ -33,89 +27,89 @@ export module Routes {
   var publicRoutes: string[] = [];
   var adminRoutes: string[] = [];
 
-  function populateRoutes(mainRoute: string, routes: Array<string>) {
+  function populateRoutes( mainRoute: string, routes: Array<string> ) {
     var populated = Array<string>();
-    for (var i = 0; i < routes.length; i++) {
-      const s = routes[i];
-      populated.push(mainRoute + (s === '/' ? '' : s));
+    for ( var i = 0; i < routes.length; i++ ) {
+      const s = routes[ i ];
+      populated.push( mainRoute + ( s === '/' ? '' : s ) );
     }
 
     return populated;
   }
 
-  export const mount = (app: any) => {
+  export const mount = ( app: any ) => {
     const preloadUtil = new PreloadUtil();
     environment = new Environment();
-    mongodb_provider = new MongoDbProvider(environment.args());
+    mongodb_provider = new MongoDbProvider( environment.args() );
     postgresql_provider = new PostgreSqlProvider(
-      environment.args(),
-      'FileServer'
+        environment.args(),
+        'FileServer'
     );
 
     preloadUtil
-      .preload(mongodb_provider, postgresql_provider)
-      .then(() => console.log('DB preloads are completed.'));
+    .preload( mongodb_provider, postgresql_provider )
+    .then( () => console.log( 'DB preloads are completed.' ) );
 
     publicRoutes = [
-      ...populateRoutes(subRoutes.monitor, monitorPublicRoutes),
-      ...populateRoutes(subRoutes.file, filePublicRoutes),
+      ...populateRoutes( subRoutes.monitor, monitorPublicRoutes ),
+      ...populateRoutes( subRoutes.file, filePublicRoutes ),
     ];
-    console.log('Public Routes: ', publicRoutes);
+    console.log( 'Public Routes: ', publicRoutes );
 
     const responseInterceptor = (
-      req: Request,
-      res: Response,
-      next: NextFunction
+        req: Request,
+        res: Response,
+        next: NextFunction
     ) => {
       let originalSend = res.send;
-      const encryptionUtil = new EncryptionUtil(environment.args());
+      const encryptionUtil = new EncryptionUtil( environment.args() );
       res.send = function () {
-        debugLogUtil.log('Starting Encryption: ', new Date());
-        const encrypted_arguments = encryptionUtil.encrypt(arguments);
-        debugLogUtil.log('Encryption Completed: ', new Date());
+        debugLogUtil.log( 'Starting Encryption: ', new Date() );
+        const encrypted_arguments = encryptionUtil.encrypt( arguments );
+        debugLogUtil.log( 'Encryption Completed: ', new Date() );
 
-        originalSend.apply(res, encrypted_arguments as any);
+        originalSend.apply( res, encrypted_arguments as any );
       } as any;
 
       next();
     };
 
     // Use this interceptor before routes
-    app.use(responseInterceptor);
+    app.use( responseInterceptor );
 
     // INFO: Keep this method at top at all times
-    app.all('/*', async (req: Request, res: Response, next: NextFunction) => {
+    app.all( '/*', async ( req: Request, res: Response, next: NextFunction ) => {
       try {
         // create context
         res.locals.ctx = await context(
-          req,
-          environment.args(),
-          publicRoutes,
-          adminRoutes,
-          mongodb_provider,
-          postgresql_provider
+            req,
+            environment.args(),
+            publicRoutes,
+            adminRoutes,
+            mongodb_provider,
+            postgresql_provider
         );
 
         next();
-      } catch (err) {
-        let error = errorHandlerUtil.handle(err);
-        res.status(error.code).json({ message: error.message });
+      } catch ( err ) {
+        let error = errorHandlerUtil.handle( err );
+        res.status( error.code ).json( { message: error.message } );
       }
-    });
+    } );
 
     // INFO: Add your routes here
-    app.use(subRoutes.monitor, monitorRouter);
-    app.use(subRoutes.file, fileRouter);
+    app.use( subRoutes.monitor, monitorRouter );
+    app.use( subRoutes.file, fileRouter );
 
     // Use for error handling
-    app.use(function (
-      err: Error,
-      req: Request,
-      res: Response,
-      next: NextFunction
+    app.use( function (
+        err: Error,
+        req: Request,
+        res: Response,
+        next: NextFunction
     ) {
-      let error = errorHandlerUtil.handle(err);
-      res.status(error.code).json({ message: error.message });
-    });
+      let error = errorHandlerUtil.handle( err );
+      res.status( error.code ).json( { message: error.message } );
+    } );
   };
 }
