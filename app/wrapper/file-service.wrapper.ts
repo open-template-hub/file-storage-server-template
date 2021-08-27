@@ -27,7 +27,7 @@ export class FileServiceWrapper implements FileService {
       return null;
     }
 
-    return await this.fileService.initializeClient( providerConfig );
+    return this.fileService.initializeClient( providerConfig );
   };
 
   /**
@@ -40,7 +40,7 @@ export class FileServiceWrapper implements FileService {
       return file;
     }
 
-    return await this.fileService.upload( client, file );
+    return this.fileService.upload( client, file );
   };
 
   /**
@@ -53,6 +53,6 @@ export class FileServiceWrapper implements FileService {
       return null;
     }
 
-    return await this.fileService.download( client, externalFileId );
+    return this.fileService.download( client, externalFileId );
   };
 }

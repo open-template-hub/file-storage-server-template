@@ -103,6 +103,6 @@ export class S3FileService implements FileService {
       throw new Error( err.message );
     }
 
-    return ( res.$response.data as any ).Body.toString( 'base64' );
+    return ( res.$response.data ).Body.toString( 'base64' );
   }
 }

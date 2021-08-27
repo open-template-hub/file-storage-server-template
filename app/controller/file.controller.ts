@@ -30,11 +30,7 @@ export class FileController {
 
     if ( file.uploaded ) {
       const fileRepository = new FileRepository( context.postgresql_provider );
-      return await fileRepository.saveFile(
-          context.username,
-          file,
-          context.serviceKey
-      );
+      return fileRepository.saveFile( context.username, file, context.serviceKey );
     }
 
     throw new Error( 'File upload failed' );
