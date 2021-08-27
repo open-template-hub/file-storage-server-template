@@ -2,16 +2,16 @@
  * @description holds file service wrapper
  */
 
-import { FileService } from '../interface/file-service.interface';
-import { S3FileService } from '../provider/s3-file-service.provider';
-import { File } from '../interface/file.interface';
 import { FileServiceEnum } from '../enum/file-service.enum';
+import { FileService } from '../interface/file-service.interface';
+import { File } from '../interface/file.interface';
+import { S3FileService } from '../provider/s3-file-service.provider';
 
 export class FileServiceWrapper implements FileService {
   fileService: FileService | undefined;
 
-  constructor(uploadService: FileServiceEnum) {
-    if (uploadService === FileServiceEnum.S3) {
+  constructor( uploadService: FileServiceEnum ) {
+    if ( uploadService === FileServiceEnum.S3 ) {
       this.fileService = new S3FileService();
     } else {
       this.fileService = undefined;
@@ -22,12 +22,12 @@ export class FileServiceWrapper implements FileService {
    * initializes client
    * @param providerConfig provider config
    */
-  initializeClient = async (providerConfig: any): Promise<any> => {
-    if (this.fileService === undefined) {
+  initializeClient = async ( providerConfig: any ): Promise<any> => {
+    if ( this.fileService === undefined ) {
       return null;
     }
 
-    return await this.fileService.initializeClient(providerConfig);
+    return this.fileService.initializeClient( providerConfig );
   };
 
   /**
@@ -35,12 +35,12 @@ export class FileServiceWrapper implements FileService {
    * @param client client
    * @param file file
    */
-  upload = async (client: any, file: File): Promise<File> => {
-    if (this.fileService === undefined) {
+  upload = async ( client: any, file: File ): Promise<File> => {
+    if ( this.fileService === undefined ) {
       return file;
     }
 
-    return await this.fileService.upload(client, file);
+    return this.fileService.upload( client, file );
   };
 
   /**
@@ -48,11 +48,11 @@ export class FileServiceWrapper implements FileService {
    * @param client client
    * @param externalFileId external file id
    */
-  download = async (client: any, externalFileId: string): Promise<any> => {
-    if (this.fileService === undefined) {
+  download = async ( client: any, externalFileId: string ): Promise<any> => {
+    if ( this.fileService === undefined ) {
       return null;
     }
 
-    return await this.fileService.download(client, externalFileId);
+    return this.fileService.download( client, externalFileId );
   };
 }

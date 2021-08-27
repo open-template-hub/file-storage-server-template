@@ -19,18 +19,18 @@ export class ServiceProviderDataModel {
       payload: { type: Object },
     };
 
-    this.productSchema = new mongoose.Schema(schema);
+    this.productSchema = new mongoose.Schema( schema );
   }
 
   /**
    * creates provider model
    * @returns provider model
    */
-  getDataModel = async (conn: mongoose.Connection) => {
+  getDataModel = async ( conn: mongoose.Connection ) => {
     return conn.model(
-      this.collectionName,
-      this.productSchema,
-      this.collectionName
+        this.collectionName,
+        this.productSchema,
+        this.collectionName
     );
   };
 }
