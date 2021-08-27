@@ -5,18 +5,18 @@
 </p>
 
 <h1 align="center">
-File Storage Server Template
+Open Template Hub - File Storage Server Template v2
 </h1>
 
-[![License](https://img.shields.io/github/license/open-template-hub/file-storage-server-template?color=2F7488&style=for-the-badge)](LICENSE)
-[![Issues](https://img.shields.io/github/issues/open-template-hub/file-storage-server-template?color=2F7488&style=for-the-badge)](https://github.com/open-template-hub/file-storage-server-template/issues)
-[![PRCLosed](https://img.shields.io/github/issues-pr-closed-raw/open-template-hub/file-storage-server-template?color=2F7488&style=for-the-badge)](https://github.com/open-template-hub/file-storage-server-template/pulls?q=is%3Apr+is%3Aclosed)
-[![LastCommit](https://img.shields.io/github/last-commit/open-template-hub/file-storage-server-template?color=2F7488&style=for-the-badge)](https://github.com/open-template-hub/file-storage-server-template/commits/master)
-[![Release](https://img.shields.io/github/release/open-template-hub/file-storage-server-template?include_prereleases&color=2F7488&style=for-the-badge)](https://github.com/open-template-hub/file-storage-server-template/releases)
+[![License](https://img.shields.io/github/license/open-template-hub/file-storage-server-template?color=43b043&style=for-the-badge)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/open-template-hub/file-storage-server-template?color=43b043&style=for-the-badge)](https://github.com/open-template-hub/file-storage-server-template/issues)
+[![PRCLosed](https://img.shields.io/github/issues-pr-closed-raw/open-template-hub/file-storage-server-template?color=43b043&style=for-the-badge)](https://github.com/open-template-hub/file-storage-server-template/pulls?q=is%3Apr+is%3Aclosed)
+[![LastCommit](https://img.shields.io/github/last-commit/open-template-hub/file-storage-server-template?color=43b043&style=for-the-badge)](https://github.com/open-template-hub/file-storage-server-template/commits/master)
+[![Release](https://img.shields.io/github/release/open-template-hub/file-storage-server-template?include_prereleases&color=43b043&style=for-the-badge)](https://github.com/open-template-hub/file-storage-server-template/releases)
 [![SonarCloud](https://img.shields.io/sonar/quality_gate/open-template-hub_file-storage-server-template?server=https%3A%2F%2Fsonarcloud.io&label=Sonar%20Cloud&style=for-the-badge&logo=sonarcloud)](https://sonarcloud.io/dashboard?id=open-template-hub_file-storage-server-template)
 [![BTC](https://img.shields.io/badge/Donate-BTC-ORANGE?color=F5922F&style=for-the-badge&logo=bitcoin)](https://commerce.coinbase.com/checkout/8313af5f-de48-498d-b2cb-d98819ca7d5e)
 
-File Storage Server Template in NodeJS Express.js
+File Storage Server Template that supports uploading and downloading files from AWS S3
 
 ## Ways to Begin
 
