@@ -1,9 +1,12 @@
 {
   "name": "File Storage Server Template",
-  "description": "File Storage Server Template in NodeJS Express.js",
+  "description": "File Storage Server Template that supports uploading and downloading files from AWS S3",
   "repository": "https://github.com/open-template-hub/file-storage-server-template",
   "logo": "https://avatars2.githubusercontent.com/u/65504426?s=200&v=4",
   "keywords": [
+    "file-sorage",
+    "download",
+    "upload",
     "server",
     "template",
     "nodejs",
@@ -11,7 +14,9 @@
     "mongodb",
     "mongoose",
     "aws",
+    "aws-s3",
     "amazon",
+    "amazon-web-services",
     "s3"
   ]
 }
