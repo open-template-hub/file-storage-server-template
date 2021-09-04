@@ -2,7 +2,7 @@
   "name": "File Storage Server Template",
   "description": "File Storage Server Template that supports uploading and downloading files from AWS S3",
   "repository": "https://github.com/open-template-hub/file-storage-server-template",
-  "logo": "https://github.com/open-template-hub/open-template-hub.github.io/blob/master/assets/logo/brand-logo.png?raw=true",
+  "logo": "https://raw.githubusercontent.com/open-template-hub/open-template-hub.github.io/master/assets/logo/brand-logo.png",
   "keywords": [
     "file-sorage",
     "download",
