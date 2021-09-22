@@ -71,6 +71,8 @@ RESPONSE_ENCRYPTION_SECRET={Response Encryption Secret}
 MONGODB_CONNECTION_LIMIT={MongoDB Open Connection Limit}
 
 POSTGRESQL_CONNECTION_LIMIT={PostgreSQL Open Connection Limit}
+
+ORCHESTRATION_SERVER_QUEUE_CHANNEL= {Orchestration Server MQ Channel Name}
 ```
 
 For pre-deployment of S3 provider, update **assets/sql/preload.data.json**
