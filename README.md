@@ -57,22 +57,27 @@ Check project's current **nodejs** and **npm** version from **[package.json](pac
 
 If you don't give **RESPONSE_ENCRYPTION_SECRET**, response encryption mechanism will be disabled automatically.
 
-```applescript
-PORT={Server Port}
+``` applescript
+PORT=4004
+
+PROJECT=OTH
+MODULE=BasicInfoServer
+ENVIRONMENT=Local
+
+MONGODB_URI={Database Connection Url}
+MONGODB_CONNECTION_LIMIT={MongoDB Connection Limit}
+
+DATABASE_URL={Database Connection Url}
+POSTGRESQL_CONNECTION_LIMIT={Postgresql Connection Limit}
+        
+CLOUDAMQP_APIKEY={MQ Api Key}
+CLOUDAMQP_URL={MQ Connection Url}
+
+FILE_SERVER_QUEUE_CHANNEL=oth_file_queue
+ORCHESTRATION_SERVER_QUEUE_CHANNEL=oth_orchestration_queue
 
 ACCESS_TOKEN_SECRET={Access Token Secret}
-
-DATABASE_URL={PostgreSQL Connection String}
-
-MONGODB_URI={MongoDB Connection String}
-
 RESPONSE_ENCRYPTION_SECRET={Response Encryption Secret}
-
-MONGODB_CONNECTION_LIMIT={MongoDB Open Connection Limit}
-
-POSTGRESQL_CONNECTION_LIMIT={PostgreSQL Open Connection Limit}
-
-ORCHESTRATION_SERVER_QUEUE_CHANNEL= {Orchestration Server MQ Channel Name}
 ```
 
 For pre-deployment of S3 provider, update **assets/sql/preload.data.json**
