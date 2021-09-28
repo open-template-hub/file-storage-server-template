@@ -1,7 +1,7 @@
 {
   "name": "file-storage-server-template",
   "description": "File Storage Server Template that supports uploading and downloading files from AWS S3",
-  "version": "2.0.17",
+  "version": "3.0.0",
   "license": "MIT",
   "main": "file-storage-server.main.ts",
   "scripts": {
