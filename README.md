@@ -61,7 +61,7 @@ If you don't give **RESPONSE_ENCRYPTION_SECRET**, response encryption mechanism 
 PORT=4004
 
 PROJECT=OTH
-MODULE=BasicInfoServer
+MODULE=FileStorageServer
 ENVIRONMENT=Local
 
 MONGODB_URI={Database Connection Url}

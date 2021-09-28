@@ -7,7 +7,7 @@ if [ ! -f .env ]; then
     echo "PORT=4004"
 
     echo "PROJECT=OTH"
-    echo "MODULE=BasicInfoServer"
+    echo "MODULE=FileStorageServer"
     echo "ENVIRONMENT=Local"
 
     echo "MONGODB_URI={Database Connection Url}"
