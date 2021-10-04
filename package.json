@@ -6,7 +6,8 @@
   "main": "file-storage-server.main.ts",
   "scripts": {
     "start": "ts-node file-storage-server.main.ts",
-    "startLocal": "nodemon --exec DEBUG=* ts-node file-storage-server.main.ts"
+    "startLocal": "nodemon --exec DEBUG=* ts-node file-storage-server.main.ts",
+    "outdated": "node dependency-checker.ts > docs/OUTDATED.md"
   },
   "dependencies": {
     "@open-template-hub/common": "^2.1.15",
