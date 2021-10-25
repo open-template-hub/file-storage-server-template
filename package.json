@@ -27,7 +27,7 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "nodemon": "^1.19.0"
+    "nodemon": "^2.0.14"
   },
   "git repository": "https://github.com/open-template-hub/file-storage-server-template",
   "repository": {
