@@ -18,7 +18,7 @@ Following packages are not updated in the develop branch yet. So, if you want to
 | @open-template-hub/common   |  2.1.15    | 2.1.15   |  3.0.1   | file-storage-server-template |
 | dotenv                      |   8.6.0    |  8.6.0   | 10.0.0   | file-storage-server-template |
 | express-promise-router      |   3.0.3    |  3.0.3   |  4.1.0   | file-storage-server-template |
-| mongoose                    | 5.13.12  5 | .13.12   | 6.0.12   | file-storage-server-template |
+| mongoose                    | 5.13.13  5 | .13.13   | 6.0.12   | file-storage-server-template |
 | nodemon                     |  1.19.4    | 1.19.4   | 2.0.14   | file-storage-server-template |
 | typescript                  |  3.9.10    | 3.9.10   |  4.4.4   | file-storage-server-template |
 
