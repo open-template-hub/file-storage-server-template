@@ -19,7 +19,7 @@ Following packages are not updated in the develop branch yet. So, if you want to
 | dotenv                      |   8.6.0    |  8.6.0   | 10.0.0   | file-storage-server-template |
 | express-promise-router      |   3.0.3    |  3.0.3   |  4.1.0   | file-storage-server-template |
 | mongoose                    | 5.13.13  5 | .13.13   | 6.0.12   | file-storage-server-template |
-| nodemon                     |  1.19.4    | 1.19.4   | 2.0.14   | file-storage-server-template |
+| nodemon                     |  1.19.4    | 1.19.4   | 2.0.15   | file-storage-server-template |
 | typescript                  |  3.9.10    | 3.9.10   |  4.4.4   | file-storage-server-template |
 
 <table align="right"><tr><td><a href="https://opentemplatehub.com"><img src="https://raw.githubusercontent.com/open-template-hub/open-template-hub.github.io/master/assets/logo/brand-logo.png" width="50px" alt="oth"/></a></td><td><b>Open Template Hub © 2021</b></td></tr></table>
