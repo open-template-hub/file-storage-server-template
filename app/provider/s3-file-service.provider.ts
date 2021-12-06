@@ -73,7 +73,7 @@ export class S3FileService implements FileService {
         ContentEncoding: 'base64',
       } )
       .promise();
-    } catch ( err ) {
+    } catch ( err: any ) {
       throw new Error( err.message );
     }
 
@@ -99,7 +99,7 @@ export class S3FileService implements FileService {
         Bucket: this.payload.bucketName,
       } )
       .promise();
-    } catch ( err ) {
+    } catch ( err: any ) {
       throw new Error( err.message );
     }
 
