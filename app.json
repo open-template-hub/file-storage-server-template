@@ -1,0 +1,24 @@
+{
+  "name": "file-storage-server-template",
+  "description": "File Storage Server Template is a generic open-source file storage server that has a simple yet powerful design to connect your business with third-party file storage provider companies (like AWS S3).",
+  "website": "https://opentemplatehub.com/product/server/file-storage-server-template",
+  "repository": "https://github.com/open-template-hub/file-storage-server-template",
+  "logo": "https://raw.githubusercontent.com/open-template-hub/open-template-hub.github.io/master/assets/logo/server/file-storage-server-logo.png",
+  "keywords": [
+    "file-sorage",
+    "download",
+    "upload",
+    "server",
+    "template",
+    "nodejs",
+    "typescript",
+    "mongodb",
+    "mongoose",
+    "aws",
+    "aws-s3",
+    "amazon",
+    "amazon-web-services",
+    "s3",
+    "open template hub"
+  ]
+}
