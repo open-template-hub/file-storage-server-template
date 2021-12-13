@@ -31,7 +31,7 @@ export namespace Routes {
   var environment: Environment;
   var postgresql_provider: PostgreSqlProvider;
   var message_queue_provider: MessageQueueProvider;
-  const errorHandlerUtil = new ErrorHandlerUtil();
+  let errorHandlerUtil: ErrorHandlerUtil;
   const debugLogUtil = new DebugLogUtil();
   var publicRoutes: string[] = [];
   var adminRoutes: string[] = [];
@@ -48,6 +48,7 @@ export namespace Routes {
   export const mount = (app: any) => {
     const preloadUtil = new PreloadUtil();
     environment = new Environment();
+    errorHandlerUtil = new ErrorHandlerUtil( debugLogUtil, environment.args() );
     mongodb_provider = new MongoDbProvider(environment.args());
     postgresql_provider = new PostgreSqlProvider(
       environment.args(),
