@@ -1,7 +1,7 @@
 {
   "name": "file-storage-server-template",
   "description": "File Storage Server Template is a generic open-source file storage server that has a simple yet powerful design to connect your business with third-party file storage provider companies (like AWS S3).",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "license": "MIT",
   "main": "file-storage-server.main.ts",
   "scripts": {
