@@ -64,7 +64,6 @@ export class GoogleCloudFileService implements FileService {
       const blobStream = blob.createWriteStream();
 
       res = blobStream.end(buf);
-      //console.log('GCloud res: ', res);
     } catch (err: any) {
       throw new Error(err.message);
     }

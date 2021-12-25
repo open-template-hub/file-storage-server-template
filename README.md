@@ -103,7 +103,7 @@ with your configuration:
 ```json
 {
   "key": "GCloud",
-  "description": "GCloud Provider Provider",
+  "description": "Google Cloud Storage Provider",
   "payload": {
     "service": "GCloud",
     "projectId": "{GCloud Project Id}",
