@@ -15,7 +15,7 @@ Open Template Hub - File Storage Server Template v3
 [![Release](https://img.shields.io/github/release/open-template-hub/file-storage-server-template?include_prereleases&color=43b043&style=for-the-badge)](https://github.com/open-template-hub/file-storage-server-template/releases)
 [![SonarCloud](https://img.shields.io/sonar/quality_gate/open-template-hub_file-storage-server-template?server=https%3A%2F%2Fsonarcloud.io&label=Sonar%20Cloud&style=for-the-badge&logo=sonarcloud)](https://sonarcloud.io/dashboard?id=open-template-hub_file-storage-server-template)
 
-File Storage Server Template is a generic open-source file storage server that has a simple yet powerful design to connect your business with third-party file storage provider companies (like AWS S3).
+File Storage Server Template is a generic open-source file storage server that has a simple yet powerful design to connect your business with third-party file storage provider companies (AWS S3, Google Cloud Storage).
 
 ## Ways to Begin
 
@@ -56,7 +56,7 @@ Check project's current **nodejs** and **npm** version from **[package.json](pac
 
 If you don't give **RESPONSE_ENCRYPTION_SECRET**, response encryption mechanism will be disabled automatically.
 
-``` applescript
+```applescript
 PORT=4004
 
 PROJECT=OTH
@@ -68,7 +68,7 @@ MONGODB_CONNECTION_LIMIT={MongoDB Connection Limit}
 
 DATABASE_URL={Database Connection Url}
 POSTGRESQL_CONNECTION_LIMIT={Postgresql Connection Limit}
-        
+
 CLOUDAMQP_APIKEY={MQ Api Key}
 CLOUDAMQP_URL={MQ Connection Url}
 
@@ -93,6 +93,24 @@ with your configuration:
     "region": "{S3 Region}",
     "apiVersion": "{API Version}",
     "bucketName": "{S3 Bucket Name}"
+  }
+}
+```
+
+For pre-deployment of Google Cloud Storage provider, update **assets/sql/preload.data.json**
+with your configuration:
+
+```json
+{
+  "key": "GCloud",
+  "description": "GCloud Provider Provider",
+  "payload": {
+    "service": "GCloud",
+    "projectId": "{GCloud Project Id}",
+    "clientId": "{GCloud Service User Unique Id}",
+    "serviceAccount": "{GCloud Service User Email}",
+    "secretAccessKey": "{GCloud Service User Private Key}",
+    "bucketName": "{GCloud Bucket Name}"
   }
 }
 ```
