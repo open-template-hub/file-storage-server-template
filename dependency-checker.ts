@@ -14,7 +14,7 @@ console.log(
     '\n' +
     '\n' +
     '<h1 align="center">\n' +
-    'Open Template Hub - File Storage Server Template v3\n' +
+    'Open Template Hub - File Storage Server Template v4\n' +
     '  <br/>\n' +
     '(outdated packages)\n' +
     '</h1>\n' +
