@@ -6,7 +6,7 @@
 
 
 <h1 align="center">
-Open Template Hub - File Storage Server Template v3
+Open Template Hub - File Storage Server Template v4
   <br/>
 (outdated packages)
 </h1>
