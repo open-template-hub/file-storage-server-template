@@ -48,6 +48,10 @@
     "amazon",
     "amazon-web-services",
     "s3",
-    "open template hub"
+    "open template hub",
+    "gcp",
+    "google cloud storage",
+    "gcloud",
+    "gcloud storage"
   ]
 }
