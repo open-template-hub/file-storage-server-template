@@ -2,7 +2,11 @@
  * @description holds file routes
  */
 
-import { ResponseCode } from '@open-template-hub/common';
+import {
+  authorizedBy,
+  ResponseCode,
+  UserRole,
+} from '@open-template-hub/common';
 import { Request, Response } from 'express';
 import Router from 'express-promise-router';
 import { FileController } from '../controller/file.controller';
@@ -14,29 +18,35 @@ const subRoutes = {
   public: '/public',
 };
 
-export const publicRoutes = [ subRoutes.public ];
-
 export const router = Router();
 
 const fileController = new FileController();
 
-router.get( subRoutes.public, async ( req: Request, res: Response ) => {
+router.get(subRoutes.public, async (req: Request, res: Response) => {
   // Download a file
-  let file = await fileController.downloadFile( res.locals.ctx, req.query.id );
-  res.status( ResponseCode.OK ).json( { file } );
-} );
+  let file = await fileController.downloadFile(res.locals.ctx, req.query.id);
+  res.status(ResponseCode.OK).json({ file });
+});
 
-router.post( subRoutes.me, async ( req: Request, res: Response ) => {
-  // Upload a file
-  let id = await fileController.createFile(
+router.post(
+  subRoutes.me,
+  authorizedBy([UserRole.ADMIN, UserRole.DEFAULT]),
+  async (req: Request, res: Response) => {
+    // Upload a file
+    let id = await fileController.createFile(
       res.locals.ctx,
       req.body.payload as File
-  );
-  res.status( ResponseCode.CREATED ).json( { id } );
-} );
+    );
+    res.status(ResponseCode.CREATED).json({ id });
+  }
+);
 
-router.get( subRoutes.me, async ( req: Request, res: Response ) => {
-  // Download a file
-  let file = await fileController.downloadFile( res.locals.ctx, req.query.id );
-  res.status( ResponseCode.OK ).json( { file } );
-} );
+router.get(
+  subRoutes.me,
+  authorizedBy([UserRole.ADMIN, UserRole.DEFAULT]),
+  async (req: Request, res: Response) => {
+    // Download a file
+    let file = await fileController.downloadFile(res.locals.ctx, req.query.id);
+    res.status(ResponseCode.OK).json({ file });
+  }
+);

@@ -12,11 +12,9 @@ import { NextFunction, Request, Response } from 'express';
 import { Environment } from '../../environment';
 import { FileQueueConsumer } from '../consumer/file-queue.consumer';
 import {
-  publicRoutes as filePublicRoutes,
   router as fileRouter,
 } from './file.route';
 import {
-  publicRoutes as monitorPublicRoutes,
   router as monitorRouter,
 } from './monitor.route';
 
@@ -33,8 +31,6 @@ export namespace Routes {
   var message_queue_provider: MessageQueueProvider;
   let errorHandlerUtil: ErrorHandlerUtil;
   const debugLogUtil = new DebugLogUtil();
-  var publicRoutes: string[] = [];
-  var adminRoutes: string[] = [];
 
   function populateRoutes(mainRoute: string, routes: Array<string>) {
     var populated = Array<string>();
@@ -73,12 +69,6 @@ export namespace Routes {
       .preload(mongodb_provider, postgresql_provider)
       .then(() => console.log('DB preloads are completed.'));
 
-    publicRoutes = [
-      ...populateRoutes(subRoutes.monitor, monitorPublicRoutes),
-      ...populateRoutes(subRoutes.file, filePublicRoutes),
-    ];
-    console.log('Public Routes: ', publicRoutes);
-
     const responseInterceptor = (
       req: Request,
       res: Response,
@@ -107,8 +97,6 @@ export namespace Routes {
         res.locals.ctx = await context(
           req,
           environment.args(),
-          publicRoutes,
-          adminRoutes,
           mongodb_provider,
           postgresql_provider
         );
