@@ -11,12 +11,8 @@ import {
 import { NextFunction, Request, Response } from 'express';
 import { Environment } from '../../environment';
 import { FileQueueConsumer } from '../consumer/file-queue.consumer';
-import {
-  router as fileRouter,
-} from './file.route';
-import {
-  router as monitorRouter,
-} from './monitor.route';
+import { router as fileRouter } from './file.route';
+import { router as monitorRouter } from './monitor.route';
 
 const subRoutes = {
   root: '/',
@@ -32,19 +28,10 @@ export namespace Routes {
   let errorHandlerUtil: ErrorHandlerUtil;
   const debugLogUtil = new DebugLogUtil();
 
-  function populateRoutes(mainRoute: string, routes: Array<string>) {
-    var populated = Array<string>();
-    for (const s of routes) {
-      populated.push(mainRoute + (s === '/' ? '' : s));
-    }
-
-    return populated;
-  }
-
   export const mount = (app: any) => {
     const preloadUtil = new PreloadUtil();
     environment = new Environment();
-    errorHandlerUtil = new ErrorHandlerUtil( debugLogUtil, environment.args() );
+    errorHandlerUtil = new ErrorHandlerUtil(debugLogUtil, environment.args());
     mongodb_provider = new MongoDbProvider(environment.args());
     postgresql_provider = new PostgreSqlProvider(
       environment.args(),
