@@ -22,8 +22,8 @@ class S3Package {
 }
 
 export class S3FileService implements FileService {
-  constructor( private payload: any = null ) {
-  }
+
+  payload: any = null;
 
   /**
    * initializes client

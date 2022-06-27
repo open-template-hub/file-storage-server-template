@@ -36,7 +36,7 @@ export namespace Routes {
       applicationName: 'FileServer',
     } as MountAssets;
 
-    var routes: Array<Route> = [];
+    const routes: Array<Route> = [];
 
     routes.push({ name: subRoutes.monitor, router: monitorRouter });
     routes.push({ name: subRoutes.file, router: fileRouter });
