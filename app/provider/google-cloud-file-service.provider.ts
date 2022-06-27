@@ -6,8 +6,8 @@ class GoogleCloudPackage {
   static Storage: any;
 
   public static getInstance() {
-    if (!this.Storage) {
-      const { Storage } = require('@google-cloud/storage');
+    if ( !this.Storage ) {
+      const { Storage } = require( '@google-cloud/storage' );
       this.Storage = Storage;
     }
 
@@ -18,13 +18,14 @@ class GoogleCloudPackage {
 }
 
 export class GoogleCloudFileService implements FileService {
-  constructor(private payload: any = null) {}
+
+  payload: any = null;
 
   /**
    * initializes client
    * @param providerConfig provider config
    */
-  async initializeClient(providerConfig: any): Promise<any> {
+  async initializeClient( providerConfig: any ): Promise<any> {
     // Dynamically import gcloud sdks on initialize
     const gCloudPackage: any = GoogleCloudPackage.getInstance();
     const Storage: any = gCloudPackage.Storage;
@@ -33,16 +34,14 @@ export class GoogleCloudFileService implements FileService {
 
     this.payload = payload;
 
-    const storage = new Storage({
+    return new Storage( {
       projectId: payload.projectId,
       credentials: {
         client_id: payload.clientId,
         client_email: payload.serviceAccount,
         private_key: payload.secretAccessKey,
       },
-    });
-
-    return storage;
+    } );
   }
 
   /**
@@ -50,22 +49,22 @@ export class GoogleCloudFileService implements FileService {
    * @param client service client
    * @param file file
    */
-  async upload(client: any, file: File): Promise<File> {
+  async upload( client: any, file: File ): Promise<File> {
     file.external_file_id = uuidv4();
     const buf = Buffer.from(
-      file.data.replace(/^data:image\/\w+;base64,/, ''),
-      'base64'
+        file.data.replace( /^data:image\/\w+;base64,/, '' ),
+        'base64'
     );
 
     let res;
     try {
-      const bucket = client.bucket(this.payload.bucketName);
-      const blob = bucket.file(file.external_file_id);
+      const bucket = client.bucket( this.payload.bucketName );
+      const blob = bucket.file( file.external_file_id );
       const blobStream = blob.createWriteStream();
 
-      res = blobStream.end(buf);
-    } catch (err: any) {
-      throw new Error(err.message);
+      blobStream.end( buf );
+    } catch ( err: any ) {
+      throw new Error( err.message );
     }
 
     file.uploaded = true;
@@ -81,16 +80,16 @@ export class GoogleCloudFileService implements FileService {
    * @param client service client
    * @param externalFileId external file id
    */
-  async download(client: any, externalFileId: string): Promise<any> {
+  async download( client: any, externalFileId: string ): Promise<any> {
     let res;
     try {
-      const bucket = client.bucket(this.payload.bucketName);
-      let file = bucket.file(externalFileId);
+      const bucket = client.bucket( this.payload.bucketName );
+      let file = bucket.file( externalFileId );
       res = await file.download();
-    } catch (err: any) {
-      throw new Error(err.message);
+    } catch ( err: any ) {
+      throw new Error( err.message );
     }
 
-    return res[0].toString('base64');
+    return res[ 0 ].toString( 'base64' );
   }
 }
