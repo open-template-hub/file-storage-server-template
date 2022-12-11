@@ -36,6 +36,27 @@ export class FileController {
     throw new Error( 'File upload failed' );
   };
 
+  createTeamFile = async ( context: Context, teamId: string, file: File ): Promise<any> => {
+    if ( !this.isValidFile( file ) )
+    throw new Error(
+        'File must contain contentType, title, description and data'
+    );
+
+    const serviceClient = await this.getServiceClient(
+      context.mongodb_provider,
+      context.serviceKey
+    );
+
+    file = await serviceClient.service.upload( serviceClient.client, file );
+
+    if ( file.uploaded ) {
+      const fileRepository = new FileRepository( context.postgresql_provider );
+      return fileRepository.saveFile( teamId, file, context.serviceKey );
+    }
+
+    throw new Error( 'File upload failed' );
+  }
+
   /**
    * gets file by id
    * @param context context
