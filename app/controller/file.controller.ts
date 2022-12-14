@@ -85,6 +85,8 @@ export class FileController {
       file.service_key
     );
 
+    console.log("Public Url: ", serviceClient.publicUrl);
+
     if (file.is_public) {
       file.url = Path.join(serviceClient.publicUrl, file.external_file_id);
     } else {
@@ -93,6 +95,8 @@ export class FileController {
         file.external_file_id
       );
     }
+
+    console.log("File Url: ", file.url);
 
     return file;
   };
