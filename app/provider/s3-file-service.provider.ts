@@ -7,11 +7,11 @@ class S3Package {
   static S3: any;
 
   public static getInstance() {
-    if ( !this.config && !this.S3 ) {
-      const { config } = require( 'aws-sdk/global' );
+    if (!this.config && !this.S3) {
+      const { config } = require('aws-sdk/global');
       this.config = config;
-      this.S3 = require( 'aws-sdk/clients/s3' );
-      console.info( 'Initializing S3 Package. Config: ', this.config );
+      this.S3 = require('aws-sdk/clients/s3');
+      console.info('Initializing S3 Package. Config: ', this.config);
     }
 
     return {
@@ -22,14 +22,13 @@ class S3Package {
 }
 
 export class S3FileService implements FileService {
-
   payload: any = null;
 
   /**
    * initializes client
    * @param providerConfig provider config
    */
-  async initializeClient( providerConfig: any ): Promise<any> {
+  async initializeClient(providerConfig: any): Promise<any> {
     // Dynamically import aws sdks on initialize
     const s3Package: any = S3Package.getInstance();
     const config: any = s3Package.config;
@@ -39,15 +38,15 @@ export class S3FileService implements FileService {
 
     this.payload = payload;
 
-    config.update( {
+    config.update({
       accessKeyId: payload.accessKeyId,
       secretAccessKey: payload.secretAccessKey,
       region: payload.region,
-    } );
+    });
 
-    return new S3( {
+    return new S3({
       apiVersion: payload.apiVersion,
-    } );
+    });
   }
 
   /**
@@ -55,26 +54,27 @@ export class S3FileService implements FileService {
    * @param client service client
    * @param file file
    */
-  async upload( client: any, file: File ): Promise<File> {
+  async upload(client: any, file: File): Promise<File> {
     file.external_file_id = uuidv4();
     const buf = Buffer.from(
-        file.data.replace( /^data:image\/\w+;base64,/, '' ),
-        'base64'
+      file.data.replace(/^data:image\/\w+;base64,/, ''),
+      'base64'
     );
 
     let res;
     try {
       res = await client
-      .putObject( {
-        Body: buf,
-        Key: file.external_file_id,
-        Bucket: this.payload.bucketName,
-        ContentType: file.content_type,
-        ContentEncoding: 'base64',
-      } )
-      .promise();
-    } catch ( err: any ) {
-      throw new Error( err.message );
+        .putObject({
+          Body: buf,
+          Key: file.external_file_id,
+          Bucket: this.payload.bucketName,
+          ContentType: file.content_type,
+          ContentEncoding: 'base64',
+          ACL: file.is_public ? 'public-read' : '',
+        })
+        .promise();
+    } catch (err: any) {
+      throw new Error(err.message);
     }
 
     file.uploaded = !res.$response.error;
@@ -90,19 +90,19 @@ export class S3FileService implements FileService {
    * @param client service client
    * @param externalFileId external file id
    */
-  async download( client: any, externalFileId: string ): Promise<any> {
+  async download(client: any, externalFileId: string): Promise<any> {
     let res;
     try {
       res = await client
-      .getObject( {
-        Key: externalFileId,
-        Bucket: this.payload.bucketName,
-      } )
-      .promise();
-    } catch ( err: any ) {
-      throw new Error( err.message );
+        .getObject({
+          Key: externalFileId,
+          Bucket: this.payload.bucketName,
+        })
+        .promise();
+    } catch (err: any) {
+      throw new Error(err.message);
     }
 
-    return ( res.$response.data ).Body.toString( 'base64' );
+    return res.$response.data.Body.toString('base64');
   }
 }
