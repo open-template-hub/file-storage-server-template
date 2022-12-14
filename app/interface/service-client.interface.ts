@@ -7,4 +7,5 @@ import { FileService } from './file-service.interface';
 export interface ServiceClient {
   client: any;
   service: FileService;
+  publicUrl: string;
 }

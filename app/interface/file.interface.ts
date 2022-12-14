@@ -16,4 +16,5 @@ export interface File {
   uploaded: boolean;
   service_key: string;
   is_public: boolean;
+  url: string;
 }

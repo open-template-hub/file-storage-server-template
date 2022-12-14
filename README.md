@@ -92,7 +92,8 @@ with your configuration:
     "secretAccessKey": "{AWS Secret Key Id}",
     "region": "{S3 Region}",
     "apiVersion": "{API Version}",
-    "bucketName": "{S3 Bucket Name}"
+    "bucketName": "{S3 Bucket Name}",
+    "publicUrl": "{S3 Public Url}"
   }
 }
 ```
@@ -110,7 +111,8 @@ with your configuration:
     "clientId": "{GCloud Service User Unique Id}",
     "serviceAccount": "{GCloud Service User Email}",
     "secretAccessKey": "{GCloud Service User Private Key}",
-    "bucketName": "{GCloud Bucket Name}"
+    "bucketName": "{GCloud Bucket Name}",
+    "publicUrl": "{GCloud Public Url}"
   }
 }
 ```
