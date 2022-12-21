@@ -31,6 +31,8 @@ export class FileController {
       file.reporter = context.username;
     }
 
+    console.log('File: ', file);
+
     file = await serviceClient.service.upload(serviceClient.client, file);
 
     if (file.uploaded) {
