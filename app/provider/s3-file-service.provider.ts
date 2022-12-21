@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { FileType } from '../enum/file-type.enum';
 import { FileService } from '../interface/file-service.interface';
 import { File } from '../interface/file.interface';
 
@@ -55,7 +56,15 @@ export class S3FileService implements FileService {
    * @param file file
    */
   async upload(client: any, file: File): Promise<File> {
-    file.external_file_id = uuidv4();
+    if (
+      file.type === FileType.TEAM_PROFILE_PICTURE ||
+      file.type === FileType.USER_PROFILE_PICTURE
+    ) {
+      file.external_file_id = file.type + '/' + file.reporter;
+    } else {
+      file.external_file_id = uuidv4();
+    }
+
     const buf = Buffer.from(
       file.data.replace(/^data:image\/\w+;base64,/, ''),
       'base64'

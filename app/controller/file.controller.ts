@@ -27,6 +27,10 @@ export class FileController {
       context.serviceKey
     );
 
+    if (!(file.reporter && file.reporter.length > 0)) {
+      file.reporter = context.username;
+    }
+
     file = await serviceClient.service.upload(serviceClient.client, file);
 
     if (file.uploaded) {
