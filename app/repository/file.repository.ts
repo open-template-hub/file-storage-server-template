@@ -17,7 +17,7 @@ export class FileRepository {
    */
   saveFile = async ( username: string, file: File, serviceKey: string ) => {
     const result = await this.provider.query(
-        'INSERT INTO files(username, service_key, content_type, title, description, external_file_id, created_time, last_update_time, is_public) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
+        'INSERT INTO files(username, service_key, content_type, title, description, external_file_id, created_time, last_update_time, is_public, type) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id',
         [
           username,
           serviceKey,
@@ -28,6 +28,7 @@ export class FileRepository {
           file.created_time,
           file.last_update_time,
           file.is_public,
+          file.type
         ]
     );
     return result.rows[ 0 ].id;

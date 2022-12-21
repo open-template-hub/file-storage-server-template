@@ -18,7 +18,6 @@ const subRoutes = {
   root: '/',
   me: '/me',
   public: '/public',
-  team: '/team'
 };
 
 export const router = Router();
@@ -51,19 +50,5 @@ router.get(
     // Download a file
     let file = await fileController.downloadFile(res.locals.ctx, req.query.id);
     res.status(ResponseCode.OK).json({ file });
-  }
-);
-
-router.post(
-  subRoutes.team,
-  teamAuthorizedBy( [ TeamRole.CREATOR, TeamRole.WRITER ] ),
-  async ( req: Request, res: Response ) => {
-    let id = await fileController.createTeamFile(
-      res.locals.ctx,
-      req.body.teamId,
-      req.body.payload as File
-    );
-    
-    res.status(ResponseCode.CREATED).json({ id });
   }
 );

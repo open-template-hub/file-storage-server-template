@@ -9,6 +9,7 @@ import { FileRepository } from '../repository/file.repository';
 import { ServiceProviderRepository } from '../repository/service-provider.repository';
 import { FileServiceWrapper } from '../wrapper/file-service.wrapper';
 import * as Path from 'path';
+import { FileType } from '../enum/file-type.enum';
 
 export class FileController {
   /**
@@ -27,50 +28,22 @@ export class FileController {
       context.serviceKey
     );
 
-    if (!(file.reporter && file.reporter.length > 0)) {
+    if (
+      !(file.reporter && file.reporter.length > 0) &&
+      file.type === FileType.USER_PROFILE_PICTURE
+    ) {
       file.reporter = context.username;
     }
-
-    console.log('File: ', file);
 
     file = await serviceClient.service.upload(serviceClient.client, file);
 
     if (file.uploaded) {
       const fileRepository = new FileRepository(context.postgresql_provider);
       return fileRepository.saveFile(
-        context.username,
+        file.reporter || context.username,
         file,
         context.serviceKey
       );
-    }
-
-    throw new Error('File upload failed');
-  };
-
-  createTeamFile = async (
-    context: Context,
-    teamId: string,
-    file: File
-  ): Promise<any> => {
-    if (!this.isValidFile(file))
-      throw new Error(
-        'File must contain contentType, title, description and data'
-      );
-
-    const serviceClient = await this.getServiceClient(
-      context.mongodb_provider,
-      context.serviceKey
-    );
-
-    if (!(file.reporter && file.reporter.length > 0)) {
-      file.reporter = teamId;
-    }
-
-    file = await serviceClient.service.upload(serviceClient.client, file);
-
-    if (file.uploaded) {
-      const fileRepository = new FileRepository(context.postgresql_provider);
-      return fileRepository.saveFile(teamId, file, context.serviceKey);
     }
 
     throw new Error('File upload failed');
