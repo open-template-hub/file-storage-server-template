@@ -58,7 +58,9 @@ export class S3FileService implements FileService {
   async upload(client: any, file: File): Promise<File> {
     if (
       file.type === FileType.TEAM_PROFILE_PICTURE ||
-      file.type === FileType.USER_PROFILE_PICTURE
+      file.type === FileType.USER_PROFILE_PICTURE ||
+      file.type === FileType.TEAM_COVER_PICTURE ||
+      file.type === FileType.USER_COVER_PICTURE
     ) {
       file.external_file_id = file.type + '/' + file.reporter;
     } else {
