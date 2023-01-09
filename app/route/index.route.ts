@@ -1,11 +1,4 @@
-import {
-  ContextArgs,
-  MountArgs,
-  MountAssets,
-  Route,
-  RouteArgs,
-  mount as mountApp,
-} from '@open-template-hub/common';
+import { ContextArgs, mount as mountApp, MountArgs, MountAssets, Route, RouteArgs, } from '@open-template-hub/common';
 import { Environment } from '../../environment';
 import { FileQueueConsumer } from '../consumer/file-queue.consumer';
 import { router as fileRouter } from './file.route';
@@ -18,7 +11,7 @@ const subRoutes = {
 };
 
 export namespace Routes {
-  export const mount = (app: any) => {
+  export const mount = ( app: any ) => {
     const envArgs = new Environment().args();
 
     const ctxArgs = {
@@ -38,8 +31,8 @@ export namespace Routes {
 
     const routes: Array<Route> = [];
 
-    routes.push({ name: subRoutes.monitor, router: monitorRouter });
-    routes.push({ name: subRoutes.file, router: fileRouter });
+    routes.push( { name: subRoutes.monitor, router: monitorRouter } );
+    routes.push( { name: subRoutes.file, router: fileRouter } );
 
     const routeArgs = { routes } as RouteArgs;
 
@@ -50,6 +43,6 @@ export namespace Routes {
       assets,
     } as MountArgs;
 
-    mountApp(args);
+    mountApp( args );
   };
 }

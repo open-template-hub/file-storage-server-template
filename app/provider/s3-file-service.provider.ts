@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { FileService } from '../interface/file-service.interface';
 import { File } from '../interface/file.interface';
+import { FileUtil } from '../util/file.util';
 
 class S3Package {
   static config: any;
@@ -22,8 +23,8 @@ class S3Package {
 }
 
 export class S3FileService implements FileService {
-
   payload: any = null;
+  fileUtil: FileUtil = new FileUtil();
 
   /**
    * initializes client
@@ -56,7 +57,12 @@ export class S3FileService implements FileService {
    * @param file file
    */
   async upload( client: any, file: File ): Promise<File> {
-    file.external_file_id = uuidv4();
+    if ( this.fileUtil.isPublicFileType( file.type ) ) {
+      file.external_file_id = file.type + '/' + file.reporter;
+    } else {
+      file.external_file_id = uuidv4();
+    }
+
     const buf = Buffer.from(
         file.data.replace( /^data:image\/\w+;base64,/, '' ),
         'base64'
@@ -71,6 +77,7 @@ export class S3FileService implements FileService {
         Bucket: this.payload.bucketName,
         ContentType: file.content_type,
         ContentEncoding: 'base64',
+        ACL: file.is_public ? 'public-read' : '',
       } )
       .promise();
     } catch ( err: any ) {
@@ -103,6 +110,6 @@ export class S3FileService implements FileService {
       throw new Error( err.message );
     }
 
-    return ( res.$response.data ).Body.toString( 'base64' );
+    return res.$response.data.Body.toString( 'base64' );
   }
 }

@@ -3,13 +3,18 @@
  */
 
 import { Context, MongoDbProvider } from '@open-template-hub/common';
+import { FileType } from '../enum/file-type.enum';
 import { File } from '../interface/file.interface';
 import { ServiceClient } from '../interface/service-client.interface';
 import { FileRepository } from '../repository/file.repository';
 import { ServiceProviderRepository } from '../repository/service-provider.repository';
+import { FileUtil } from '../util/file.util';
 import { FileServiceWrapper } from '../wrapper/file-service.wrapper';
 
 export class FileController {
+  constructor( private fileUtil: FileUtil = new FileUtil() ) {
+  }
+
   /**
    * creates file
    * @param context context
@@ -26,14 +31,28 @@ export class FileController {
         context.serviceKey
     );
 
-    file = await serviceClient.service.upload( serviceClient.client, file );
-
-    if ( file.uploaded ) {
-      const fileRepository = new FileRepository( context.postgresql_provider );
-      return fileRepository.saveFile( context.username, file, context.serviceKey );
+    if (
+        !( file.reporter && file.reporter.length > 0 ) &&
+        ( file.type === FileType.USER_PROFILE_PICTURE ||
+            file.type === FileType.USER_COVER_PICTURE )
+    ) {
+      file.reporter = context.username;
     }
 
-    throw new Error( 'File upload failed' );
+    file = await serviceClient.service.upload( serviceClient.client, file );
+
+    if ( file.uploaded && !this.fileUtil.isPublicFileType( file.type ) ) {
+      const fileRepository = new FileRepository( context.postgresql_provider );
+      return fileRepository.saveFile(
+          file.reporter || context.username,
+          file,
+          context.serviceKey
+      );
+    }
+
+    if ( !this.fileUtil.isPublicFileType( file.type ) ) {
+      throw new Error( 'File upload failed' );
+    }
   };
 
   /**
@@ -55,10 +74,14 @@ export class FileController {
         file.service_key
     );
 
-    file.data = await serviceClient.service.download(
-        serviceClient.client,
-        file.external_file_id
-    );
+    if ( file.is_public ) {
+      file.url = serviceClient.publicUrl + file.external_file_id;
+    } else {
+      file.data = await serviceClient.service.download(
+          serviceClient.client,
+          file.external_file_id
+      );
+    }
 
     return file;
   };
@@ -81,7 +104,11 @@ export class FileController {
     if ( client === undefined )
       throw new Error( 'Client is not initialized correctly' );
 
-    return { client, service } as ServiceClient;
+    return {
+      client,
+      service,
+      publicUrl: serviceConfig.payload.publicUrl,
+    } as ServiceClient;
   };
 
   /**
@@ -95,13 +122,11 @@ export class FileController {
   ): Promise<any> => {
     const conn = provider.getConnection();
 
-    const serviceProviderRepository = await new ServiceProviderRepository().initialize(
-        conn
-    );
+    const serviceProviderRepository =
+        await new ServiceProviderRepository().initialize( conn );
 
-    let serviceConfig: any = await serviceProviderRepository.getServiceProviderByKey(
-        serviceKey
-    );
+    let serviceConfig: any =
+        await serviceProviderRepository.getServiceProviderByKey( serviceKey );
 
     if ( serviceConfig === null )
       throw new Error( 'Upload service can not be found' );

@@ -3,6 +3,7 @@
  */
 
 import { Base64 } from 'aws-sdk/clients/ecr';
+import { FileType } from '../enum/file-type.enum';
 
 export interface File {
   id: number;
@@ -16,4 +17,7 @@ export interface File {
   uploaded: boolean;
   service_key: string;
   is_public: boolean;
+  url: string;
+  reporter: string;
+  type: FileType;
 }
