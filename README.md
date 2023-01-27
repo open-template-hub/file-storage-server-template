@@ -75,6 +75,9 @@ CLOUDAMQP_URL={MQ Connection Url}
 FILE_SERVER_QUEUE_CHANNEL=oth_file_queue
 ORCHESTRATION_SERVER_QUEUE_CHANNEL=oth_orchestration_queue
 
+REDISCLOUD_URL={Redis Connection Url}
+REDIS_CONNECTION_LIMIT={Redis Connection Limit}
+
 ACCESS_TOKEN_SECRET={Access Token Secret}
 RESPONSE_ENCRYPTION_SECRET={Response Encryption Secret}
 ```
